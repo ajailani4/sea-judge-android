@@ -1,5 +1,5 @@
 package com.example.seajudge.ui
 
-sealed class Screen {
-
+sealed class Screen(val route: String) {
+    object OnboardingScreen : Screen("onboarding_screen")
 }

@@ -209,9 +209,11 @@ fun LoginScreen(
             }
 
             is LoginState.Success -> {
-                LaunchedEffect(Unit) {
-                    navController.navigate(Screen.DashboardScreen.route) {
-                        launchSingleTop = true
+                navController.navigate(Screen.DashboardScreen.route) {
+                    launchSingleTop = true
+
+                    popUpTo(Screen.OnboardingScreen.route) {
+                        inclusive = true
                     }
                 }
             }

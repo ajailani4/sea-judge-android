@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.seajudge.R
+import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.feature.onboarding.component.OnboardingItemScreen
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.Secondary
@@ -52,8 +53,9 @@ fun OnboardingScreen(navController: NavController) {
                     Image(
                         modifier = Modifier.size(45.dp),
                         painter = painterResource(id = R.drawable.logo_app),
-                        contentDescription = "App Logo"
+                        contentDescription = "App logo"
                     )
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = "Sea Judge",
                         color = Primary,
@@ -61,6 +63,7 @@ fun OnboardingScreen(navController: NavController) {
                         style = MaterialTheme.typography.h1
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = "Selamat Datang",
                     color = Primary,
@@ -89,7 +92,7 @@ fun OnboardingScreen(navController: NavController) {
                         .padding(horizontal = 20.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate(Screen.LoginScreen.route) }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),

@@ -14,7 +14,9 @@ import com.example.seajudge.ui.Navigation
 import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.theme.SeaJudgeTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

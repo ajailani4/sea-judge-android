@@ -25,7 +25,7 @@ fun OnboardingItemScreen(item: OnboardingItem) {
         Image(
             modifier = Modifier
                 .align(CenterHorizontally)
-                .size(500.dp),
+                .size(480.dp),
             painter = painterResource(id = item.image),
             contentDescription = "Illustration"
         )

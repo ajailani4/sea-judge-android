@@ -1,25 +1,31 @@
 package com.example.seajudge.ui.feature.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.seajudge.R
 import com.example.seajudge.ui.theme.Grey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.poppinsFamily
@@ -46,102 +52,127 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
             .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            modifier = Modifier
-                .align(CenterHorizontally)
-                .padding(top = 70.dp),
-            text = "Masuk",
-            color = Primary,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.h1
-        )
-        Spacer(modifier = Modifier.height(50.dp))
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = username,
-            onValueChange = onUsernameChanged,
-            leadingIcon = {
-                Icon(
-                    imageVector = EvaIcons.Fill.Person,
-                    tint = Primary,
-                    contentDescription = "Username icon"
-                )
-            },
-            placeholder = {
-                Text(
-                    text = "Username",
-                    color = Grey,
-                    style = MaterialTheme.typography.subtitle1
-                )
-            },
-            singleLine = true,
-            textStyle = TextStyle(
-                color = Color.Black,
-                fontFamily = poppinsFamily,
-                fontSize = 15.sp
-            )
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = password,
-            onValueChange = onPasswordChanged,
-            leadingIcon = {
-                Icon(
-                    imageVector = EvaIcons.Fill.Lock,
-                    tint = Primary,
-                    contentDescription = "Password icon"
-                )
-            },
-            placeholder = {
-                Text(
-                    text = "Password",
-                    color = Grey,
-                    style = MaterialTheme.typography.subtitle1
-                )
-            },
-            trailingIcon = {
-                IconButton(onClick = onPasswordVisibilityChanged) {
-                    Icon(
-                        imageVector = if (passwordVisibility) {
-                            EvaIcons.Outline.Eye
-                        } else {
-                            EvaIcons.Outline.EyeOff
-                        },
-                        contentDescription = "Password visibility icon"
-                    )
-                }
-            },
-            singleLine = true,
-            textStyle = TextStyle(
-                color = Color.Black,
-                fontFamily = poppinsFamily,
-                fontSize = 15.sp
-            ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
-            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-            onClick = { /*TODO*/ }
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(top = 70.dp),
                 text = "Masuk",
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.subtitle1
+                color = Primary,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h1
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = username,
+                onValueChange = onUsernameChanged,
+                leadingIcon = {
+                    Icon(
+                        imageVector = EvaIcons.Fill.Person,
+                        tint = Primary,
+                        contentDescription = "Username icon"
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Username",
+                        color = Grey,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                },
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontFamily = poppinsFamily,
+                    fontSize = 15.sp
+                )
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = password,
+                onValueChange = onPasswordChanged,
+                leadingIcon = {
+                    Icon(
+                        imageVector = EvaIcons.Fill.Lock,
+                        tint = Primary,
+                        contentDescription = "Password icon"
+                    )
+                },
+                placeholder = {
+                    Text(
+                        text = "Password",
+                        color = Grey,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                },
+                trailingIcon = {
+                    IconButton(onClick = onPasswordVisibilityChanged) {
+                        Icon(
+                            imageVector = if (passwordVisibility) {
+                                EvaIcons.Outline.Eye
+                            } else {
+                                EvaIcons.Outline.EyeOff
+                            },
+                            contentDescription = "Password visibility icon"
+                        )
+                    }
+                },
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontFamily = poppinsFamily,
+                    fontSize = 15.sp
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
+                onClick = { /*TODO*/ }
+            ) {
+                Text(
+                    modifier = Modifier.padding(5.dp),
+                    text = "Masuk",
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
+            Spacer(modifier = Modifier.height(15.dp))
+            ClickableText(
+                text = buildAnnotatedString {
+                    append("Belum punya akun? ")
+
+                    withStyle(
+                        style = SpanStyle(
+                            color = Primary,
+                            fontFamily = poppinsFamily,
+                            fontSize = 15.sp
+                        )
+                    ) {
+                        append("Daftar di sini")
+                    }
+                },
+                style = MaterialTheme.typography.subtitle1,
+                onClick = {}
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        Image(
+            modifier = Modifier.fillMaxWidth(),
+            painter = painterResource(id = R.drawable.img_wave),
+            contentDescription = "Wave illustration"
+        )
     }
 }

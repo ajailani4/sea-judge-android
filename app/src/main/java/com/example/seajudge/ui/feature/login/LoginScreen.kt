@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
+import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.FullSizeProgressBar
 import com.example.seajudge.ui.theme.Grey
 import com.example.seajudge.ui.theme.Primary
@@ -209,8 +210,8 @@ fun LoginScreen(
 
             is LoginState.Success -> {
                 LaunchedEffect(Unit) {
-                    scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar("Login berhasil")
+                    navController.navigate(Screen.DashboardScreen.route) {
+                        launchSingleTop = true
                     }
                 }
             }

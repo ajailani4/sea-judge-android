@@ -7,13 +7,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seajudge.data.model.request.LoginRequest
 import com.example.seajudge.domain.use_case.user.LoginUserUseCase
+import com.example.seajudge.domain.use_case.user_credential.SaveAccessTokenUseCase
+import com.example.seajudge.domain.use_case.user_credential.SaveUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase
+    private val loginUserUseCase: LoginUserUseCase,
+    private val saveUsernameUseCase: SaveUsernameUseCase,
+    private val saveAccessTokenUseCase: SaveAccessTokenUseCase
 ) : ViewModel() {
     var loginState by mutableStateOf<LoginState>(LoginState.Idle)
     var username by mutableStateOf("")
@@ -55,6 +59,10 @@ class LoginViewModel @Inject constructor(
 
                 when (response.code()) {
                     201 -> {
+                        val credentialResponse = response.body()?.data
+                        saveUsernameUseCase.invoke(credentialResponse?.username!!)
+                        saveAccessTokenUseCase.invoke(credentialResponse.accessToken)
+
                         LoginState.Success
                     }
 

@@ -9,7 +9,6 @@ import com.example.seajudge.ui.feature.login.LoginScreen
 import com.example.seajudge.ui.feature.onboarding.OnboardingScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
-@ExperimentalPagerApi
 @Composable
 fun Navigation(navController: NavHostController, startDestination: String) {
     NavHost(navController = navController, startDestination = startDestination) {

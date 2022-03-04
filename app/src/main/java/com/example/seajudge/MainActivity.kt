@@ -17,7 +17,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-@ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,6 @@ fun App(content: @Composable () -> Unit) {
     }
 }
 
-@ExperimentalPagerApi
 @Composable
 fun Content(startDestination: String) {
     val navController = rememberNavController()

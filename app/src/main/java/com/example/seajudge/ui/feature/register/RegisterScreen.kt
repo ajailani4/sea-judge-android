@@ -217,6 +217,9 @@ fun RegisterScreen(
                         color = Color.Black,
                         fontFamily = poppinsFamily,
                         fontSize = 15.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
                     )
                 )
                 Spacer(modifier = Modifier.height(15.dp))

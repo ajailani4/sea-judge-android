@@ -154,6 +154,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
+                    enabled = loginState != LoginState.LogginIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             keyboardController?.hide()

@@ -274,6 +274,7 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
+                    enabled = registerState != RegisterState.Registering,
                     onClick = {
                         if (
                             username.isNotEmpty() && name.isNotEmpty() && state.isNotEmpty() &&

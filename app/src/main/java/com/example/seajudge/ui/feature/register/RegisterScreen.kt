@@ -198,7 +198,11 @@ fun RegisterScreen(
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = phoneNumber,
-                    onValueChange = onPhoneNumberChanged,
+                    onValueChange = {
+                        if (it.length <= 15) {
+                            onPhoneNumberChanged(it)
+                        }
+                    },
                     leadingIcon = {
                         Icon(
                             imageVector = EvaIcons.Fill.Phone,

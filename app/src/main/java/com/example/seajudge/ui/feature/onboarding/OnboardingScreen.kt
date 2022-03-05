@@ -109,7 +109,7 @@ fun OnboardingScreen(navController: NavController) {
                         .padding(horizontal = 20.dp),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Secondary),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),

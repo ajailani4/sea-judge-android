@@ -1,4 +1,4 @@
-package com.example.seajudge.ui.feature.login
+package com.example.seajudge.ui.feature.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,7 +9,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -31,14 +30,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
-import com.example.seajudge.ui.common.component.FullSizeProgressBar
 import com.example.seajudge.ui.theme.Grey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.fill.Lock
+import compose.icons.evaicons.fill.*
 import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff
@@ -46,18 +44,24 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavController,
-    loginViewModel: LoginViewModel = hiltViewModel()
+    registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
-    val onEvent = loginViewModel::onEvent
-    val loginState = loginViewModel.loginState
-    val username = loginViewModel.username
-    val onUsernameChanged = loginViewModel::onUsernameChanged
-    val password = loginViewModel.password
-    val onPasswordChanged = loginViewModel::onPasswordChanged
-    val passwordVisibility = loginViewModel.passwordVisibility
-    val onPasswordVisibilityChanged = loginViewModel::onPasswordVisibilityChanged
+    val username = registerViewModel.username
+    val onUsernameChanged = registerViewModel::onUsernameChanged
+    val name = registerViewModel.name
+    val onNameChanged = registerViewModel::onNameChanged
+    val state = registerViewModel.state
+    val onStateChanged = registerViewModel::onStateChanged
+    val job = registerViewModel.job
+    val onJobChanged = registerViewModel::onJobChanged
+    val phoneNumber = registerViewModel.phoneNumber
+    val onPhoneNumberChanged = registerViewModel::onPhoneNumberChanged
+    val password = registerViewModel.password
+    val onPasswordChanged = registerViewModel::onPasswordChanged
+    val passwordVisibility = registerViewModel.passwordVisibility
+    val onPasswordVisibilityChanged = registerViewModel::onPasswordVisibilityChanged
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -76,7 +80,7 @@ fun LoginScreen(
             ) {
                 Text(
                     modifier = Modifier.padding(top = 50.dp),
-                    text = "Masuk",
+                    text = "Daftar Akun",
                     color = Primary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h1
@@ -96,6 +100,110 @@ fun LoginScreen(
                     placeholder = {
                         Text(
                             text = "Username",
+                            color = Grey,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = name,
+                    onValueChange = onNameChanged,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = EvaIcons.Fill.Person,
+                            tint = Primary,
+                            contentDescription = "Name icon"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Nama Lengkap",
+                            color = Grey,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state,
+                    onValueChange = onStateChanged,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = EvaIcons.Fill.Pin,
+                            tint = Primary,
+                            contentDescription = "State icon"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Asal Daerah",
+                            color = Grey,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = job,
+                    onValueChange = onJobChanged,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = EvaIcons.Fill.Briefcase,
+                            tint = Primary,
+                            contentDescription = "Job icon"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Pekerjaan",
+                            color = Grey,
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    )
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = phoneNumber,
+                    onValueChange = onPhoneNumberChanged,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = EvaIcons.Fill.Phone,
+                            tint = Primary,
+                            contentDescription = "Phone number icon"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Nomor Telepon",
                             color = Grey,
                             style = MaterialTheme.typography.subtitle1
                         )
@@ -157,7 +265,6 @@ fun LoginScreen(
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             keyboardController?.hide()
-                            onEvent(LoginEvent.Submit)
                         } else {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
@@ -167,7 +274,7 @@ fun LoginScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),
-                        text = "Masuk",
+                        text = "Daftar",
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.subtitle1
@@ -176,7 +283,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(15.dp))
                 ClickableText(
                     text = buildAnnotatedString {
-                        append("Belum punya akun? ")
+                        append("Sudah punya akun? ")
 
                         withStyle(
                             style = SpanStyle(
@@ -185,11 +292,11 @@ fun LoginScreen(
                                 fontSize = 15.sp
                             )
                         ) {
-                            append("Daftar di sini")
+                            append("Masuk sini")
                         }
                     },
                     style = MaterialTheme.typography.subtitle1,
-                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
+                    onClick = { navController.navigate(Screen.LoginScreen.route) }
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -198,49 +305,6 @@ fun LoginScreen(
                 painter = painterResource(id = R.drawable.img_wave),
                 contentDescription = "Wave illustration"
             )
-        }
-
-        // Observe login state
-        when (loginState) {
-            is LoginState.Idle -> {}
-
-            is LoginState.LogginIn -> {
-                FullSizeProgressBar()
-            }
-
-            is LoginState.Success -> {
-                navController.navigate(Screen.DashboardScreen.route) {
-                    launchSingleTop = true
-
-                    popUpTo(Screen.OnboardingScreen.route) {
-                        inclusive = true
-                    }
-                }
-            }
-
-            is LoginState.Fail -> {
-                LaunchedEffect(Unit) {
-                    scope.launch {
-                        loginState.message?.let { message ->
-                            scaffoldState.snackbarHostState.showSnackbar(message)
-                        }
-                    }
-                }
-
-                onEvent(LoginEvent.Idle)
-            }
-
-            is LoginState.Error -> {
-                LaunchedEffect(Unit) {
-                    scope.launch {
-                        loginState.message?.let { message ->
-                            scaffoldState.snackbarHostState.showSnackbar(message)
-                        }
-                    }
-                }
-
-                onEvent(LoginEvent.Idle)
-            }
         }
     }
 }

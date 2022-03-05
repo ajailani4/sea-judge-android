@@ -42,6 +42,7 @@ import compose.icons.evaicons.fill.*
 import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff
+import compose.icons.evaicons.outline.Person
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -122,7 +123,7 @@ fun RegisterScreen(
                     onValueChange = onNameChanged,
                     leadingIcon = {
                         Icon(
-                            imageVector = EvaIcons.Fill.Person,
+                            imageVector = EvaIcons.Outline.Person,
                             tint = Primary,
                             contentDescription = "Name icon"
                         )

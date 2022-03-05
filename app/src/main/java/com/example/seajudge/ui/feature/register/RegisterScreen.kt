@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -30,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
+import com.example.seajudge.ui.common.component.FullSizeProgressBar
 import com.example.seajudge.ui.theme.Grey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.poppinsFamily
@@ -48,6 +50,8 @@ fun RegisterScreen(
     navController: NavController,
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
+    val onEvent = registerViewModel::onEvent
+    val registerState = registerViewModel.registerState
     val username = registerViewModel.username
     val onUsernameChanged = registerViewModel::onUsernameChanged
     val name = registerViewModel.name
@@ -263,8 +267,12 @@ fun RegisterScreen(
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
                     onClick = {
-                        if (username.isNotEmpty() && password.isNotEmpty()) {
+                        if (
+                            username.isNotEmpty() && name.isNotEmpty() && state.isNotEmpty() &&
+                            job.isNotEmpty() && phoneNumber.isNotEmpty() && password.isNotEmpty()
+                        ) {
                             keyboardController?.hide()
+                            onEvent(RegisterEvent.Submit)
                         } else {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
@@ -305,6 +313,49 @@ fun RegisterScreen(
                 painter = painterResource(id = R.drawable.img_wave),
                 contentDescription = "Wave illustration"
             )
+        }
+
+        // Observe register state
+        when (registerState) {
+            is RegisterState.Idle -> {}
+
+            is RegisterState.Registering -> {
+                FullSizeProgressBar()
+            }
+
+            is RegisterState.Success -> {
+                navController.navigate(Screen.DashboardScreen.route) {
+                    launchSingleTop = true
+
+                    popUpTo(Screen.OnboardingScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            is RegisterState.Fail -> {
+                LaunchedEffect(Unit) {
+                    scope.launch {
+                        registerState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(RegisterEvent.Idle)
+            }
+
+            is RegisterState.Error -> {
+                LaunchedEffect(Unit) {
+                    scope.launch {
+                        registerState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(RegisterEvent.Idle)
+            }
         }
     }
 }

@@ -22,7 +22,10 @@ fun BottomBar(navController: NavController) {
         Screen.MyReportsScreen
     )
 
-    BottomNavigation(backgroundColor = Color.White) {
+    BottomNavigation(
+        elevation = 20.dp,
+        backgroundColor = Color.White
+    ) {
         val navBarStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBarStackEntry?.destination?.route
 

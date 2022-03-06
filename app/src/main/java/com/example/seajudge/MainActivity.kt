@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.seajudge.ui.BottomBar
@@ -22,6 +23,7 @@ import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.feature.splash.SplashViewModel
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.SeaJudgeTheme
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
@@ -94,7 +96,9 @@ fun Content(startDestination: String) {
         },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center
-    ) {
-        Navigation(navController = navController, startDestination = startDestination)
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
+            Navigation(navController = navController, startDestination = startDestination)
+        }
     }
 }

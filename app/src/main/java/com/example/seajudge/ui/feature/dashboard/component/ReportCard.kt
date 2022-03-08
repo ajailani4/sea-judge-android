@@ -1,6 +1,7 @@
 package com.example.seajudge.ui.feature.dashboard.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.seajudge.data.model.Report
+import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.util.Formatter
@@ -37,14 +39,17 @@ fun ReportCard(report: Report) {
             Text(
                 text = report.reporter,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.body1
             )
             Spacer(modifier = Modifier.height(15.dp))
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
                     .sizeIn(maxHeight = 200.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable(onClick = {
+
+                    }),
                 painter = rememberImagePainter(report.image),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Report image"

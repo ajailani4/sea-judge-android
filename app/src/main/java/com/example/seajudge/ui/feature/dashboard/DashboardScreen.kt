@@ -121,5 +121,31 @@ fun SearchTextField() {
 
 @Composable
 fun DashboardContentSection() {
-
+    Column(modifier = Modifier.padding(20.dp)) {
+        ReportCard(
+            Report(
+                id = 1,
+                username = "g_zayvich",
+                reporter = "George Zayvich",
+                image = "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8.jpg",
+                violation = "Pembuangan minyak sembarangan",
+                location = "Selat Sunda",
+                date = "2022-02-26",
+                time = "08:25"
+            )
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        ReportCard(
+            Report(
+                id = 1,
+                username = "g_zayvich",
+                reporter = "Floyd Zayvich",
+                image = "https://images.unsplash.com/photo-1570651851409-93d5add773d7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8.jpg",
+                violation = "Pembuangan minyak sembarangan",
+                location = "Selat Sunda",
+                date = "2022-02-26",
+                time = "08:25"
+            )
+        )
+    }
 }

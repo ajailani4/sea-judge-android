@@ -1,7 +1,6 @@
 package com.example.seajudge.ui.feature.dashboard
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +20,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seajudge.R
+import com.example.seajudge.data.model.Report
+import com.example.seajudge.ui.feature.dashboard.component.ReportCard
 import com.example.seajudge.ui.theme.*
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import compose.icons.EvaIcons
@@ -34,6 +35,7 @@ fun DashboardScreen() {
         item {
             DashboardHeader()
             SearchTextField()
+            DashboardContentSection()
         }
     }
 }
@@ -63,6 +65,7 @@ fun DashboardHeader() {
         }
         IconButton(onClick = { /*TODO*/ }) {
             Icon(
+                modifier = Modifier.sizeIn(27.dp),
                 imageVector = EvaIcons.Fill.LogOut,
                 tint = Red,
                 contentDescription = "Logout icon"
@@ -114,4 +117,9 @@ fun SearchTextField() {
             keyboardController?.hide()
         })
     )
+}
+
+@Composable
+fun DashboardContentSection() {
+
 }

@@ -1,4 +1,4 @@
-package com.example.seajudge.ui.feature.dashboard.component
+package com.example.seajudge.ui.common.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,15 +25,17 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Pin
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ReportCard(report: Report) {
+fun ReportCard(
+    report: Report,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),
         backgroundColor = Color.White,
-        elevation = 5.dp,
-        onClick = { /*TODO*/ }
+        elevation = 5.dp
     ) {
         Column(modifier = Modifier.padding(17.dp)) {
             Text(
@@ -47,9 +49,7 @@ fun ReportCard(report: Report) {
                     .fillMaxWidth()
                     .sizeIn(maxHeight = 200.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable(onClick = {
-
-                    }),
+                    .clickable(onClick = onClick),
                 painter = rememberImagePainter(report.image),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Report image"

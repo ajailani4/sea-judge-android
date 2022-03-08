@@ -3,11 +3,13 @@ package com.example.seajudge.ui.feature.dashboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -19,23 +21,99 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.seajudge.R
-import com.example.seajudge.data.model.Report
-import com.example.seajudge.ui.feature.dashboard.component.ReportCard
+import com.example.seajudge.ui.common.component.FullSizeImage
+import com.example.seajudge.ui.common.component.MediumProgressBar
+import com.example.seajudge.ui.common.component.ReportCard
 import com.example.seajudge.ui.theme.*
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.Search
+import kotlinx.coroutines.launch
 
 @Composable
-fun DashboardScreen() {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            DashboardHeader()
-            SearchTextField()
-            DashboardContentSection()
+fun DashboardScreen(
+    navController: NavController,
+    dashboardViewModel: DashboardViewModel = hiltViewModel()
+) {
+    val onEvent = dashboardViewModel::onEvent
+    val reportsState = dashboardViewModel.reportsState
+    val selectedReportImg = dashboardViewModel.selectedReportImg
+    val onSelectedReportImgChanged = dashboardViewModel::onSelectedReportImgChanged
+    val fullSizeImgVis = dashboardViewModel.fullSizeImgVis
+    val onFulLSizeImgVisChanged = dashboardViewModel::onFulLSizeImgVisChanged
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
+    Scaffold(scaffoldState = scaffoldState) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(20.dp)
+        ) {
+            item {
+                DashboardHeader()
+                Spacer(modifier = Modifier.height(15.dp))
+                SearchTextField()
+                Spacer(modifier = Modifier.height(30.dp))
+            }
+
+            // Full size image
+            if (fullSizeImgVis) {
+                item {
+                    FullSizeImage(
+                        image = selectedReportImg,
+                        onVisibilityChanged = onFulLSizeImgVisChanged
+                    )
+                }
+            }
+
+            // Observe reports state
+            when (reportsState) {
+                is DashboardState.LoadingReports -> {
+                    item {
+                        MediumProgressBar()
+                    }
+                }
+
+                is DashboardState.Reports -> {
+                    val reports = reportsState.reports
+
+                    if (reports != null) {
+                        if (reports.isNotEmpty()) {
+                            items(reports) { report ->
+                                ReportCard(
+                                    report = report,
+                                    onClick = {
+                                        onSelectedReportImgChanged(report.image)
+                                        onFulLSizeImgVisChanged(true)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+                        }
+                    }
+                }
+
+                is DashboardState.FailReports -> {
+                    scope.launch {
+                        reportsState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                is DashboardState.ErrorReports -> {
+                    scope.launch {
+                        reportsState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -43,9 +121,7 @@ fun DashboardScreen() {
 @Composable
 fun DashboardHeader() {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -82,7 +158,6 @@ fun SearchTextField() {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
             .navigationBarsWithImePadding(),
         value = "",
         onValueChange = {},
@@ -117,35 +192,4 @@ fun SearchTextField() {
             keyboardController?.hide()
         })
     )
-}
-
-@Composable
-fun DashboardContentSection() {
-    Column(modifier = Modifier.padding(20.dp)) {
-        ReportCard(
-            Report(
-                id = 1,
-                username = "g_zayvich",
-                reporter = "George Zayvich",
-                image = "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8.jpg",
-                violation = "Pembuangan minyak sembarangan",
-                location = "Selat Sunda",
-                date = "2022-02-26",
-                time = "08:25"
-            )
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        ReportCard(
-            Report(
-                id = 1,
-                username = "g_zayvich",
-                reporter = "Floyd Zayvich",
-                image = "https://images.unsplash.com/photo-1570651851409-93d5add773d7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8.jpg",
-                violation = "Pembuangan minyak sembarangan",
-                location = "Selat Sunda",
-                date = "2022-02-26",
-                time = "08:25"
-            )
-        )
-    }
 }

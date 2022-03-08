@@ -26,9 +26,9 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             RegisterScreen(navController)
         }
 
-        // Bottom bar menu
+        /** Bottom bar menu */
         composable(route = Screen.DashboardScreen.route) {
-            DashboardScreen()
+            DashboardScreen(navController)
         }
 
         composable(route = Screen.MyReportsScreen.route) {

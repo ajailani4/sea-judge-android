@@ -50,69 +50,69 @@ fun DashboardScreen(
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(scaffoldState = scaffoldState) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(20.dp)
-        ) {
-            item {
-                DashboardHeader()
-                Spacer(modifier = Modifier.height(15.dp))
-                SearchTextField()
-                Spacer(modifier = Modifier.height(30.dp))
-            }
-
-            // Full size image
-            if (fullSizeImgVis) {
+        Box {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(20.dp)
+            ) {
                 item {
-                    FullSizeImage(
-                        image = selectedReportImg,
-                        onVisibilityChanged = onFulLSizeImgVisChanged
-                    )
+                    DashboardHeader()
+                    Spacer(modifier = Modifier.height(15.dp))
+                    SearchTextField()
+                    Spacer(modifier = Modifier.height(30.dp))
                 }
-            }
 
-            // Observe reports state
-            when (reportsState) {
-                is DashboardState.LoadingReports -> {
-                    item {
-                        MediumProgressBar()
+                // Observe reports state
+                when (reportsState) {
+                    is DashboardState.LoadingReports -> {
+                        item {
+                            MediumProgressBar()
+                        }
                     }
-                }
 
-                is DashboardState.Reports -> {
-                    val reports = reportsState.reports
+                    is DashboardState.Reports -> {
+                        val reports = reportsState.reports
 
-                    if (reports != null) {
-                        if (reports.isNotEmpty()) {
-                            items(reports) { report ->
-                                ReportCard(
-                                    report = report,
-                                    onClick = {
-                                        onSelectedReportImgChanged(report.image)
-                                        onFulLSizeImgVisChanged(true)
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(20.dp))
+                        if (reports != null) {
+                            if (reports.isNotEmpty()) {
+                                items(reports) { report ->
+                                    ReportCard(
+                                        report = report,
+                                        onClick = {
+                                            onSelectedReportImgChanged(report.image)
+                                            onFulLSizeImgVisChanged(true)
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+                            }
+                        }
+                    }
+
+                    is DashboardState.FailReports -> {
+                        scope.launch {
+                            reportsState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+
+                    is DashboardState.ErrorReports -> {
+                        scope.launch {
+                            reportsState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }
                     }
                 }
+            }
 
-                is DashboardState.FailReports -> {
-                    scope.launch {
-                        reportsState.message?.let { message ->
-                            scaffoldState.snackbarHostState.showSnackbar(message)
-                        }
-                    }
-                }
-
-                is DashboardState.ErrorReports -> {
-                    scope.launch {
-                        reportsState.message?.let { message ->
-                            scaffoldState.snackbarHostState.showSnackbar(message)
-                        }
-                    }
-                }
+            // Full size image
+            if (fullSizeImgVis) {
+                FullSizeImage(
+                    image = selectedReportImg,
+                    onVisibilityChanged = onFulLSizeImgVisChanged
+                )
             }
         }
     }

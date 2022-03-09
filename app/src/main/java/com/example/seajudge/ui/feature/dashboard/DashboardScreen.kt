@@ -31,7 +31,6 @@ import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.common.component.MediumProgressBar
 import com.example.seajudge.ui.common.component.ReportCard
 import com.example.seajudge.ui.theme.*
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
@@ -94,7 +93,7 @@ fun DashboardScreen(
                                 items(reports) { report ->
                                     ReportCard(
                                         report = report,
-                                        onClick = {
+                                        onImageClicked = {
                                             onSelectedReportImgChanged(report.image)
                                             onFulLSizeImgVisChanged(true)
                                         }

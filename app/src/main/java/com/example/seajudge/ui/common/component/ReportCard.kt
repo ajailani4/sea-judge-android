@@ -12,12 +12,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.seajudge.data.model.Report
-import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.Secondary
@@ -32,7 +30,7 @@ import compose.icons.evaicons.outline.Pin
 fun ReportCard(
     report: Report,
     isEditable: Boolean? = false,
-    onClick: () -> Unit
+    onImageClicked: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -43,7 +41,8 @@ fun ReportCard(
         Column(modifier = Modifier.padding(17.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = report.reporter,
@@ -52,13 +51,12 @@ fun ReportCard(
                 )
 
                 if (isEditable == true) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = EvaIcons.Outline.Edit,
-                            tint = Secondary,
-                            contentDescription = "Edit report icon"
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.clickable(onClick = {}),
+                        imageVector = EvaIcons.Outline.Edit,
+                        tint = Secondary,
+                        contentDescription = "Edit report icon"
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -67,7 +65,7 @@ fun ReportCard(
                     .fillMaxWidth()
                     .sizeIn(maxHeight = 200.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable(onClick = onClick),
+                    .clickable(onClick = onImageClicked),
                 painter = rememberImagePainter(report.image),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Report image"

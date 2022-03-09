@@ -6,10 +6,7 @@ import com.example.seajudge.data.model.request.RegisterRequest
 import com.example.seajudge.data.model.response.BaseResponse
 import com.example.seajudge.data.model.response.CredentialResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
     @POST("login")
@@ -25,5 +22,10 @@ interface ApiService {
     @GET("reports")
     suspend fun getReports(
         @Query("searchQuery") searchQuery: String?
+    ): Response<BaseResponse<List<Report>>>
+
+    @GET(/*"users/{username}/reports"*/"usersreports")
+    suspend fun getUserReports(
+        /*@Path("username") username: String*/
     ): Response<BaseResponse<List<Report>>>
 }

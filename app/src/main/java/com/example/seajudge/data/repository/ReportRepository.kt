@@ -7,4 +7,6 @@ class ReportRepository @Inject constructor(
     private val reportRemoteDataSource: ReportRemoteDataSource
 ) {
     suspend fun getReports(searchQuery: String?) = reportRemoteDataSource.getReports(searchQuery)
+
+    suspend fun getUserReports(username: String) = reportRemoteDataSource.getUserReports(username)
 }

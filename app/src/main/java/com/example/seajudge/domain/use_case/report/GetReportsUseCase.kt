@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetReportsUseCase @Inject constructor(
     private val reportsRepository: ReportRepository
 ) {
-    private suspend fun getReports() = reportsRepository.getReports()
+    private suspend fun getReports(searchQuery: String?) = reportsRepository.getReports(searchQuery)
 
-    suspend operator fun invoke() = getReports()
+    suspend operator fun invoke(searchQuery: String?) = getReports(searchQuery)
 }

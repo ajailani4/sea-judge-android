@@ -9,6 +9,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("login")
@@ -22,5 +23,7 @@ interface ApiService {
     ): Response<BaseResponse<CredentialResponse>>
 
     @GET("reports")
-    suspend fun getReports(): Response<BaseResponse<List<Report>>>
+    suspend fun getReports(
+        @Query("searchQuery") searchQuery: String?
+    ): Response<BaseResponse<List<Report>>>
 }

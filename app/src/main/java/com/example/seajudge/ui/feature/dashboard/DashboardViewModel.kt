@@ -15,17 +15,10 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val getReportsUseCase: GetReportsUseCase
 ) : ViewModel() {
-    var reportsState by mutableStateOf<DashboardState>(DashboardState.LoadingReports)
+    var reportsState by mutableStateOf<DashboardState>(DashboardState.Idle)
+    var searchQuery by mutableStateOf<String?>(null)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
-
-    fun onSelectedReportImgChanged(image: String) {
-        selectedReportImg = image
-    }
-
-    fun onFulLSizeImgVisChanged(visibility: Boolean) {
-        fullSizeImgVis = visibility
-    }
 
     init {
         onEvent(DashboardEvent.LoadReports)
@@ -37,10 +30,26 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    fun onSearchQueryChanged(query: String? = null) {
+        searchQuery = query
+    }
+
+    fun onSelectedReportImgChanged(image: String) {
+        selectedReportImg = image
+    }
+
+    fun onFulLSizeImgVisChanged(visibility: Boolean) {
+        fullSizeImgVis = visibility
+    }
+
     private fun getReports() {
         viewModelScope.launch {
+            reportsState = DashboardState.LoadingReports
+
             reportsState = try {
-                val response = getReportsUseCase.invoke()
+                if (searchQuery?.isEmpty() == true) searchQuery = null
+
+                val response = getReportsUseCase.invoke(searchQuery)
 
                 if (response.code() == 200) {
                     DashboardState.Reports(response.body()?.data)

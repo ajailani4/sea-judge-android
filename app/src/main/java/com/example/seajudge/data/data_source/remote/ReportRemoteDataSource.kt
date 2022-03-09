@@ -6,5 +6,5 @@ import javax.inject.Inject
 class ReportRemoteDataSource @Inject constructor(
     private val apiService: ApiService
 ) {
-    suspend fun getReports() = apiService.getReports()
+    suspend fun getReports(searchQuery: String?) = apiService.getReports(searchQuery)
 }

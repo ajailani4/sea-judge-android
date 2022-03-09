@@ -13,8 +13,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +38,7 @@ import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.Search
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardScreen(
     navController: NavController,
@@ -42,12 +46,18 @@ fun DashboardScreen(
 ) {
     val onEvent = dashboardViewModel::onEvent
     val reportsState = dashboardViewModel.reportsState
+    val searchQuery = dashboardViewModel.searchQuery
+    val onSearchQueryChanged = dashboardViewModel::onSearchQueryChanged
     val selectedReportImg = dashboardViewModel.selectedReportImg
     val onSelectedReportImgChanged = dashboardViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = dashboardViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = dashboardViewModel::onFulLSizeImgVisChanged
+
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val localFocusManager = LocalFocusManager.current
 
     Scaffold(scaffoldState = scaffoldState) {
         Box {
@@ -58,7 +68,13 @@ fun DashboardScreen(
                 item {
                     DashboardHeader()
                     Spacer(modifier = Modifier.height(15.dp))
-                    SearchTextField()
+                    SearchTextField(
+                        onEvent = onEvent,
+                        searchQuery = searchQuery,
+                        onSearchQueryChanged = onSearchQueryChanged,
+                        keyboardController = keyboardController,
+                        localFocusManager = localFocusManager
+                    )
                     Spacer(modifier = Modifier.height(30.dp))
                 }
 
@@ -104,6 +120,8 @@ fun DashboardScreen(
                             }
                         }
                     }
+
+                    else -> {}
                 }
             }
 
@@ -152,15 +170,19 @@ fun DashboardHeader() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchTextField() {
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun SearchTextField(
+    onEvent: (DashboardEvent) -> Unit,
+    searchQuery: String?,
+    onSearchQueryChanged: (String) -> Unit,
+    keyboardController: SoftwareKeyboardController?,
+    localFocusManager: FocusManager
+) {
+
 
     TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsWithImePadding(),
-        value = "",
-        onValueChange = {},
+        modifier = Modifier.fillMaxWidth(),
+        value = searchQuery ?: "",
+        onValueChange = onSearchQueryChanged,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = SearchTextFieldGrey,
@@ -189,7 +211,9 @@ fun SearchTextField() {
         ),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
+            localFocusManager.clearFocus()
             keyboardController?.hide()
+            onEvent(DashboardEvent.LoadReports)
         })
     )
 }

@@ -91,7 +91,7 @@ fun ReportCard(
                     )
                 }
                 Text(
-                    text = "${report.time}, ${Formatter.formatDate(report.date)}",
+                    text = "${Formatter.formatDate(report.date)}, ${report.time}",
                     color = DarkGrey,
                     style = MaterialTheme.typography.caption
                 )

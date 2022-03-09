@@ -20,15 +20,18 @@ import com.example.seajudge.data.model.Report
 import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
+import com.example.seajudge.ui.theme.Secondary
 import com.example.seajudge.util.Formatter
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
+import compose.icons.evaicons.outline.Edit
 import compose.icons.evaicons.outline.Pin
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ReportCard(
     report: Report,
+    isEditable: Boolean? = false,
     onClick: () -> Unit
 ) {
     Card(
@@ -38,11 +41,26 @@ fun ReportCard(
         elevation = 5.dp
     ) {
         Column(modifier = Modifier.padding(17.dp)) {
-            Text(
-                text = report.reporter,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.body1
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = report.reporter,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.body1
+                )
+
+                if (isEditable == true) {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = EvaIcons.Outline.Edit,
+                            tint = Secondary,
+                            contentDescription = "Edit report icon"
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(15.dp))
             Image(
                 modifier = Modifier

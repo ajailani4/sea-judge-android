@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.seajudge.ui.feature.dashboard.DashboardScreen
 import com.example.seajudge.ui.feature.login.LoginScreen
+import com.example.seajudge.ui.feature.my_reports.MyReportsScreen
 import com.example.seajudge.ui.feature.onboarding.OnboardingScreen
 import com.example.seajudge.ui.feature.register.RegisterScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -32,7 +33,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.MyReportsScreen.route) {
-            // MyReportsScreen()
+            MyReportsScreen(navController)
         }
     }
 }

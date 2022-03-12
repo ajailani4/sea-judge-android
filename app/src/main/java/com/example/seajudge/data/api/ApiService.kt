@@ -24,8 +24,8 @@ interface ApiService {
         @Query("searchQuery") searchQuery: String?
     ): Response<BaseResponse<List<Report>>>
 
-    @GET(/*"users/{username}/reports"*/"usersreports")
+    @GET("users/{username}/reports")
     suspend fun getUserReports(
-        /*@Path("username") username: String*/
+        @Path("username") username: String
     ): Response<BaseResponse<List<Report>>>
 }

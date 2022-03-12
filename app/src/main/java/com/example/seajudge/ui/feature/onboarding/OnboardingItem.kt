@@ -15,7 +15,7 @@ sealed class OnboardingItem(
 
     object OnboardingScreenTwo : OnboardingItem(
         title = "Laporan Aman",
-        description = "Laporan akan kami simpan di tempat yang aman dan akan diberikan ke pada pihak yang berwenang",
+        description = "Laporan akan kami simpan di tempat yang aman dan akan diberikan kepada pihak yang berwenang",
         image = R.drawable.img_onboarding_two
     )
 

@@ -8,5 +8,5 @@ class ReportRemoteDataSource @Inject constructor(
 ) {
     suspend fun getReports(searchQuery: String?) = apiService.getReports(searchQuery)
 
-    suspend fun getUserReports(username: String) = apiService.getUserReports(/*username*/)
+    suspend fun getUserReports(username: String) = apiService.getUserReports(username)
 }

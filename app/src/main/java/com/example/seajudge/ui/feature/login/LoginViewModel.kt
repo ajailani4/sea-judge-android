@@ -58,7 +58,7 @@ class LoginViewModel @Inject constructor(
                 )
 
                 when (response.code()) {
-                    201 -> {
+                    200 -> {
                         val credentialResponse = response.body()?.data
                         saveUsernameUseCase.invoke(credentialResponse?.username!!)
                         saveAccessTokenUseCase.invoke(credentialResponse.accessToken)

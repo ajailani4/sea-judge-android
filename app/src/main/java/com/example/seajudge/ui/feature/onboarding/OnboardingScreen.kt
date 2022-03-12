@@ -91,7 +91,6 @@ fun OnboardingScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                     shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
                     onClick = { navController.navigate(Screen.LoginScreen.route) }
                 ) {
                     Text(

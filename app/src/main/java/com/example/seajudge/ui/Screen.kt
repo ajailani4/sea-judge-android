@@ -17,6 +17,8 @@ sealed class Screen(
 
     object RegisterScreen : Screen("register_screen")
 
+    object UploadReportScreen : Screen("upload_report_screen")
+
     object DashboardScreen : Screen(
         route = "dashboard_screen",
         title = "Dashboard",

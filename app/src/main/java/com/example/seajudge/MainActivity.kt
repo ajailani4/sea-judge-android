@@ -70,7 +70,8 @@ fun Content(startDestination: String) {
     val hasNoBottomMenuRoutes = listOf(
         Screen.OnboardingScreen.route,
         Screen.LoginScreen.route,
-        Screen.RegisterScreen.route
+        Screen.RegisterScreen.route,
+        Screen.UploadReportScreen.route
     )
 
     Scaffold(
@@ -85,7 +86,7 @@ fun Content(startDestination: String) {
                     shape = CircleShape,
                     backgroundColor = Primary,
                     contentColor = Color.White,
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate(Screen.UploadReportScreen.route) }
                 ) {
                     Icon(
                         imageVector = EvaIcons.Fill.Plus,

@@ -30,11 +30,11 @@ import compose.icons.evaicons.outline.Image
 
 @Composable
 fun CameraPreviewView(
+    context: Context,
     imageCapture: ImageCapture,
     lensFacing: Int = CameraSelector.LENS_FACING_BACK,
-    cameraMenuEvent: (CameraMenuEvent) -> Unit
+    onCameraMenuEvent: (CameraMenuEvent) -> Unit
 ) {
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val preview = Preview.Builder().build()
@@ -70,13 +70,13 @@ fun CameraPreviewView(
         )
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.weight(1f)) {
-            CameraMenu()
+            CameraMenu(onCameraMenuEvent)
         }
     }
 }
 
 @Composable
-fun CameraMenu() {
+fun CameraMenu(onCameraMenuEvent: (CameraMenuEvent) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,7 +85,7 @@ fun CameraMenu() {
     ) {
         IconButton(
             modifier = Modifier.size(60.dp),
-            onClick = { /*TODO*/ }
+            onClick = { onCameraMenuEvent(CameraMenuEvent.SwitchLens) }
         ) {
             Icon(
                 imageVector = EvaIcons.Outline.Flip2,
@@ -96,7 +96,7 @@ fun CameraMenu() {
         Button(
             modifier = Modifier.size(60.dp),
             shape = RoundedCornerShape(20.dp),
-            onClick = { /*TODO*/ }
+            onClick = { onCameraMenuEvent(CameraMenuEvent.Capture) }
         ) {
             Icon(
                 imageVector = EvaIcons.Outline.Camera,
@@ -105,7 +105,7 @@ fun CameraMenu() {
         }
         IconButton(
             modifier = Modifier.size(60.dp),
-            onClick = { /*TODO*/ }
+            onClick = { onCameraMenuEvent(CameraMenuEvent.ViewGallery) }
         ) {
             Icon(
                 imageVector = EvaIcons.Outline.Image,

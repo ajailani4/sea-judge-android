@@ -1,7 +1,6 @@
 package com.example.seajudge.ui
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,8 +9,7 @@ import com.example.seajudge.ui.feature.login.LoginScreen
 import com.example.seajudge.ui.feature.my_reports.MyReportsScreen
 import com.example.seajudge.ui.feature.onboarding.OnboardingScreen
 import com.example.seajudge.ui.feature.register.RegisterScreen
-import com.example.seajudge.ui.feature.upload_report.UploadReportScreen
-import com.google.accompanist.pager.ExperimentalPagerApi
+import com.example.seajudge.ui.feature.upload_report.screen.UploadReportScreen
 
 @Composable
 fun Navigation(navController: NavHostController, startDestination: String) {

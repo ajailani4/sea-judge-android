@@ -12,9 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.seajudge.ui.BottomBar
@@ -23,8 +21,8 @@ import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.feature.splash.SplashViewModel
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.SeaJudgeTheme
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Plus
@@ -62,6 +60,7 @@ fun App(content: @Composable () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Content(startDestination: String) {
     val navController = rememberNavController()
@@ -73,6 +72,9 @@ fun Content(startDestination: String) {
         Screen.RegisterScreen.route,
         Screen.UploadReportScreen.route
     )
+
+    val cameraPermissionState =
+        rememberPermissionState(android.Manifest.permission.CAMERA)
 
     Scaffold(
         bottomBar = {
@@ -86,7 +88,18 @@ fun Content(startDestination: String) {
                     shape = CircleShape,
                     backgroundColor = Primary,
                     contentColor = Color.White,
-                    onClick = { navController.navigate(Screen.UploadReportScreen.route) }
+                    onClick = {
+                        when {
+                            cameraPermissionState.hasPermission -> {
+                                navController.navigate(Screen.UploadReportScreen.route)
+                            }
+
+                            cameraPermissionState.shouldShowRationale ||
+                            !cameraPermissionState.permissionRequested -> {
+                                cameraPermissionState.launchPermissionRequest()
+                            }
+                        }
+                    }
                 ) {
                     Icon(
                         imageVector = EvaIcons.Fill.Plus,

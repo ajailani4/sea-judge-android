@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,8 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.ArrowBack
 import compose.icons.evaicons.outline.Camera
+import compose.icons.evaicons.outline.Flip2
+import compose.icons.evaicons.outline.Image
 
 @Composable
 fun CameraScreen(
@@ -38,15 +41,42 @@ fun CameraScreen(
             ) // Temporary
             Spacer(modifier = Modifier.height(20.dp))
             Box(modifier = Modifier.weight(1f)) {
-                Button(
-                    modifier = Modifier.size(62.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    onClick = { /*TODO*/ }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(
-                        imageVector = EvaIcons.Outline.Camera,
-                        contentDescription = "Camera icon"
-                    )
+                    IconButton(
+                        modifier = Modifier.size(60.dp),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = EvaIcons.Outline.Flip2,
+                            tint = Color.Black,
+                            contentDescription = "Flip camera icon"
+                        )
+                    }
+                    Button(
+                        modifier = Modifier.size(60.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = EvaIcons.Outline.Camera,
+                            contentDescription = "Camera icon"
+                        )
+                    }
+                    IconButton(
+                        modifier = Modifier.size(60.dp),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = EvaIcons.Outline.Image,
+                            tint = Color.Black,
+                            contentDescription = "Gallery icon"
+                        )
+                    }
                 }
             }
         }

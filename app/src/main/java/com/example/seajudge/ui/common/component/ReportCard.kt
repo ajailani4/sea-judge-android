@@ -66,7 +66,7 @@ fun ReportCard(
                     .sizeIn(maxHeight = 200.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .clickable(onClick = onImageClicked),
-                painter = rememberImagePainter(report.image),
+                painter = rememberImagePainter(report.photo),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Report image"
             )

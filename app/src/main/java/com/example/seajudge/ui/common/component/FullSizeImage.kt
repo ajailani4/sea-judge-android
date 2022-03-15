@@ -56,12 +56,7 @@ fun FullSizeImage(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = rememberImagePainter(
-                            data = image,
-                            builder = {
-                                size(OriginalSize)
-                            }
-                        ),
+                        painter = rememberImagePainter(image),
                         contentScale = ContentScale.Fit,
                         contentDescription = "Full size image"
                     )

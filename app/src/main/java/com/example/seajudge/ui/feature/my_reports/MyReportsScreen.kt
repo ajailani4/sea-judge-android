@@ -70,7 +70,7 @@ fun MyReportsScreen(
                                         report = myReport,
                                         isEditable = true,
                                         onImageClicked = {
-                                            onSelectedReportImgChanged(myReport.image)
+                                            onSelectedReportImgChanged(myReport.photo)
                                             onFulLSizeImgVisChanged(true)
                                         }
                                     )

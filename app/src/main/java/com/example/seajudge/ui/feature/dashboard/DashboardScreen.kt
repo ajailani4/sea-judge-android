@@ -94,7 +94,7 @@ fun DashboardScreen(
                                     ReportCard(
                                         report = report,
                                         onImageClicked = {
-                                            onSelectedReportImgChanged(report.image)
+                                            onSelectedReportImgChanged(report.photo)
                                             onFulLSizeImgVisChanged(true)
                                         }
                                     )

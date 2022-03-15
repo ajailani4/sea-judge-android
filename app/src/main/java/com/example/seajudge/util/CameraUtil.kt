@@ -39,7 +39,7 @@ fun ImageCapture.takePicture(
     onImageCaptured: (File) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
-    val photoFile = File(context.cacheDir.absolutePath, "${UUID.randomUUID()}.jpg")
+    val photoFile = File(context.cacheDir, "${UUID.randomUUID()}.jpg")
     val outputFileOptions = getOutputFileOptions(
         lensFacing = lensFacing,
         photoFile = photoFile
@@ -77,6 +77,7 @@ fun getOutputFileOptions(
         .build()
 }
 
+// This is used if image is picked from gallery
 fun Context.convertInputStreamToFile(inputStream: InputStream): File {
     val file = File(cacheDir, "${UUID.randomUUID()}.jpg")
 

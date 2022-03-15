@@ -75,6 +75,8 @@ fun Content(startDestination: String) {
 
     val cameraPermissionState =
         rememberPermissionState(android.Manifest.permission.CAMERA)
+    val readExStoragePermissionState =
+        rememberPermissionState(android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
     Scaffold(
         bottomBar = {
@@ -90,13 +92,18 @@ fun Content(startDestination: String) {
                     contentColor = Color.White,
                     onClick = {
                         when {
-                            cameraPermissionState.hasPermission -> {
+                            cameraPermissionState.hasPermission && readExStoragePermissionState.hasPermission -> {
                                 navController.navigate(Screen.UploadReportScreen.route)
                             }
 
                             cameraPermissionState.shouldShowRationale ||
                             !cameraPermissionState.permissionRequested -> {
                                 cameraPermissionState.launchPermissionRequest()
+                            }
+
+                            readExStoragePermissionState.shouldShowRationale ||
+                            !readExStoragePermissionState.permissionRequested -> {
+                                readExStoragePermissionState.launchPermissionRequest()
                             }
                         }
                     }

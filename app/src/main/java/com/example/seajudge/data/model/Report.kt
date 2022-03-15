@@ -4,7 +4,7 @@ data class Report(
     val id: Int,
     val username: String,
     val reporter: String,
-    val image: String,
+    val photo: String,
     val violation: String,
     val location: String,
     val date: String,

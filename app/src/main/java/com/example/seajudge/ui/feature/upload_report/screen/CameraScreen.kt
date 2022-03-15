@@ -8,11 +8,13 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.seajudge.ui.common.component.CustomToolbar
 import com.example.seajudge.ui.feature.upload_report.component.CameraView
 import com.example.seajudge.ui.theme.Primary
+import java.io.File
 
 @Composable
 fun CameraScreen(
     onBackBtnClicked: () -> Unit,
-    onCameraScreenVisChanged: (Boolean) -> Unit
+    onCameraScreenVisChanged: (Boolean) -> Unit,
+    onImageCaptured: (File) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -27,6 +29,7 @@ fun CameraScreen(
         CameraView(
             context = context,
             onImageCaptured = { file ->
+                onImageCaptured(file)
                 onCameraScreenVisChanged(false)
                 Log.d("PhotoFile", file.toString())
             },

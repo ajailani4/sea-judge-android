@@ -1,30 +1,42 @@
 package com.example.seajudge.ui.feature.upload_report.screen
 
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.CustomToolbar
-import com.example.seajudge.ui.feature.upload_report.UploadViewModel
+import com.example.seajudge.ui.feature.upload_report.UploadReportViewModel
+import java.io.File
 
 @Composable
 fun UploadReportScreen(
     navController: NavController,
-    uploadViewModel: UploadViewModel = hiltViewModel()
+    uploadReportViewModel: UploadReportViewModel = hiltViewModel()
 ) {
-    val cameraScreenVis = uploadViewModel.cameraScreenVis
-    val onCameraScreenVisChanged = uploadViewModel::onCameraScreenVisChanged
-    val backConfirmationDlgVis = uploadViewModel.backConfirmationDlgVis
-    val onBackConfirmationDlgVisChanged = uploadViewModel::onBackConfirmationDlgVis
+    val cameraScreenVis = uploadReportViewModel.cameraScreenVis
+    val onCameraScreenVisChanged = uploadReportViewModel::onCameraScreenVisChanged
+    val backConfirmationDlgVis = uploadReportViewModel.backConfirmationDlgVis
+    val onBackConfirmationDlgVisChanged = uploadReportViewModel::onBackConfirmationDlgVis
+    val photo = uploadReportViewModel.photo
+    val onPhotoChanged = uploadReportViewModel::onPhotoChanged
 
     Scaffold(
         topBar = {
@@ -37,7 +49,7 @@ fun UploadReportScreen(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            UploadReportForm()
+            UploadReportForm(photo)
             AnimatedVisibility(
                 visible = cameraScreenVis,
                 enter = expandVertically(expandFrom = Alignment.Bottom),
@@ -45,7 +57,10 @@ fun UploadReportScreen(
             ) {
                 CameraScreen(
                     onBackBtnClicked = { navController.navigateUp() },
-                    onCameraScreenVisChanged = onCameraScreenVisChanged
+                    onCameraScreenVisChanged = onCameraScreenVisChanged,
+                    onImageCaptured = { photo ->
+                        onPhotoChanged(photo)
+                    }
                 )
             }
 
@@ -66,7 +81,23 @@ fun UploadReportScreen(
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun UploadReportForm() {
-    Text(text = "Form")
+fun UploadReportForm(photo: File?) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp)
+    ) {
+        if (photo != null) {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .sizeIn(maxHeight = 400.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                painter = rememberImagePainter(photo),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Report image"
+            )
+        }
+    }
 }

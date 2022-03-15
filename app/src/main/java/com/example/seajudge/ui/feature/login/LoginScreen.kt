@@ -154,7 +154,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-                    enabled = loginState != LoginState.LogginIn,
+                    enabled = loginState != LoginState.LoggingIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             keyboardController?.hide()
@@ -205,7 +205,7 @@ fun LoginScreen(
         when (loginState) {
             is LoginState.Idle -> {}
 
-            is LoginState.LogginIn -> {
+            is LoginState.LoggingIn -> {
                 FullSizeProgressBar()
             }
 

@@ -50,7 +50,7 @@ class LoginViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            loginState = LoginState.LogginIn
+            loginState = LoginState.LoggingIn
 
             loginState = try {
                 val response = loginUserUseCase.invoke(

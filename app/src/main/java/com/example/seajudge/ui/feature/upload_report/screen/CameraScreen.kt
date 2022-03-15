@@ -11,7 +11,8 @@ import com.example.seajudge.ui.theme.Primary
 
 @Composable
 fun CameraScreen(
-    onBackBtnClicked: () -> Unit
+    onBackBtnClicked: () -> Unit,
+    onCameraScreenVisChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -26,6 +27,7 @@ fun CameraScreen(
         CameraView(
             context = context,
             onImageCaptured = { file ->
+                onCameraScreenVisChanged(false)
                 Log.d("PhotoFile", file.toString())
             },
             onError = { exception ->

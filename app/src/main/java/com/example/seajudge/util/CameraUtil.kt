@@ -51,8 +51,7 @@ fun ImageCapture.takePicture(
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 val savedUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
-                val file = File(savedUri.path!!)
-                onImageCaptured(file)
+                onImageCaptured(File(savedUri.path!!))
             }
 
             override fun onError(exception: ImageCaptureException) {

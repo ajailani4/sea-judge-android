@@ -24,8 +24,8 @@ import compose.icons.evaicons.fill.ArrowBack
 @Composable
 fun CustomToolbar(
     title: String,
-    contentColor: Color,
-    backgroundColor: Color,
+    contentColor: Color = Color.White,
+    backgroundColor: Color = Primary,
     onBackBtnClicked: () -> Unit
 ) {
     Box(modifier = Modifier

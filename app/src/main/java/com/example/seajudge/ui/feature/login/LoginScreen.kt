@@ -60,7 +60,7 @@ fun LoginScreen(
     val onPasswordVisibilityChanged = loginViewModel::onPasswordVisibilityChanged
 
     val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(scaffoldState = scaffoldState) {
@@ -160,7 +160,7 @@ fun LoginScreen(
                             keyboardController?.hide()
                             onEvent(LoginEvent.Submit)
                         } else {
-                            scope.launch {
+                            coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
                             }
                         }
@@ -221,7 +221,7 @@ fun LoginScreen(
 
             is LoginState.Fail -> {
                 LaunchedEffect(Unit) {
-                    scope.launch {
+                    coroutineScope.launch {
                         loginState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }
@@ -233,7 +233,7 @@ fun LoginScreen(
 
             is LoginState.Error -> {
                 LaunchedEffect(Unit) {
-                    scope.launch {
+                    coroutineScope.launch {
                         loginState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }

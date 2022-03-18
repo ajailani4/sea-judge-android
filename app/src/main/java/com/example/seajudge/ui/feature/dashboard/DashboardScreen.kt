@@ -55,7 +55,7 @@ fun DashboardScreen(
     val fullSizeImgVis = dashboardViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = dashboardViewModel::onFulLSizeImgVisChanged
 
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
     val activity = LocalContext.current as Activity
@@ -111,7 +111,7 @@ fun DashboardScreen(
                     }
 
                     is DashboardState.FailReports -> {
-                        scope.launch {
+                        coroutineScope.launch {
                             reportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
@@ -119,7 +119,7 @@ fun DashboardScreen(
                     }
 
                     is DashboardState.ErrorReports -> {
-                        scope.launch {
+                        coroutineScope.launch {
                             reportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }

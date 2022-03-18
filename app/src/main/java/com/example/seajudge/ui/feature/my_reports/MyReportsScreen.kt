@@ -33,7 +33,7 @@ fun MyReportsScreen(
     val fullSizeImgVis = myReportsViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = myReportsViewModel::onFulLSizeImgVisChanged
     
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(scaffoldState = scaffoldState) {
@@ -76,7 +76,7 @@ fun MyReportsScreen(
                     }
                     
                     is MyReportsState.Fail -> {
-                        scope.launch {
+                        coroutineScope.launch {
                             myReportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
@@ -84,7 +84,7 @@ fun MyReportsScreen(
                     }
 
                     is MyReportsState.Error -> {
-                        scope.launch {
+                        coroutineScope.launch {
                             myReportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }

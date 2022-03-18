@@ -68,8 +68,8 @@ fun RegisterScreen(
     val passwordVisibility = registerViewModel.passwordVisibility
     val onPasswordVisibilityChanged = registerViewModel::onPasswordVisibilityChanged
 
+    val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(scaffoldState = scaffoldState) {
@@ -283,7 +283,7 @@ fun RegisterScreen(
                             keyboardController?.hide()
                             onEvent(RegisterEvent.Submit)
                         } else {
-                            scope.launch {
+                            coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
                             }
                         }
@@ -344,7 +344,7 @@ fun RegisterScreen(
 
             is RegisterState.Fail -> {
                 LaunchedEffect(Unit) {
-                    scope.launch {
+                    coroutineScope.launch {
                         registerState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }
@@ -356,7 +356,7 @@ fun RegisterScreen(
 
             is RegisterState.Error -> {
                 LaunchedEffect(Unit) {
-                    scope.launch {
+                    coroutineScope.launch {
                         registerState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }

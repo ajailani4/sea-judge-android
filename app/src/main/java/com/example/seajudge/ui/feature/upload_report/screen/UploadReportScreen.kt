@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
@@ -31,11 +33,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.CustomToolbar
-import com.example.seajudge.ui.feature.login.LoginEvent
-import com.example.seajudge.ui.feature.login.LoginState
+import com.example.seajudge.ui.common.component.FullSizeProgressBar
+import com.example.seajudge.ui.feature.upload_report.UploadReportState
 import com.example.seajudge.ui.feature.upload_report.UploadReportViewModel
+import com.example.seajudge.ui.feature.upload_report.event.UploadReportEvent
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.poppinsFamily
@@ -46,6 +50,8 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Calendar
 import compose.icons.evaicons.outline.Clock
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -54,6 +60,8 @@ fun UploadReportScreen(
     navController: NavController,
     uploadReportViewModel: UploadReportViewModel = hiltViewModel()
 ) {
+    val onEvent = uploadReportViewModel::onEvent
+    val uploadReportState = uploadReportViewModel.uploadReportState
     val cameraScreenVis = uploadReportViewModel.cameraScreenVis
     val onCameraScreenVisChanged = uploadReportViewModel::onCameraScreenVisChanged
     val backConfirmationDlgVis = uploadReportViewModel.backConfirmationDlgVis
@@ -69,10 +77,14 @@ fun UploadReportScreen(
     val time = uploadReportViewModel.time
     val onTimeChanged = uploadReportViewModel::onTimeChanged
 
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
     val context = LocalContext.current
     (context as Activity).window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             if (!cameraScreenVis) {
                 CustomToolbar(
@@ -84,6 +96,8 @@ fun UploadReportScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             UploadReportForm(
+                onEvent = onEvent,
+                uploadReportState = uploadReportState,
                 context = context,
                 photo = photo,
                 violation = violation,
@@ -93,7 +107,9 @@ fun UploadReportScreen(
                 date = date,
                 onDateChanged = onDateChanged,
                 time = time,
-                onTimeChanged = onTimeChanged
+                onTimeChanged = onTimeChanged,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState
             )
             AnimatedVisibility(
                 visible = cameraScreenVis,
@@ -104,7 +120,9 @@ fun UploadReportScreen(
                     onBackBtnClicked = { navController.navigateUp() },
                     onCameraScreenVisChanged = onCameraScreenVisChanged,
                     onImageCaptured = { photo ->
-                        onPhotoChanged(photo)
+                        coroutineScope.launch {
+                            onPhotoChanged(Compressor.compress(context, photo))
+                        }
                     }
                 )
             }
@@ -127,12 +145,53 @@ fun UploadReportScreen(
                 )
             }
         }
+
+        // Observe upload report state
+        when (uploadReportState) {
+            is UploadReportState.Idle -> {}
+
+            is UploadReportState.UploadingReport -> {
+                FullSizeProgressBar()
+            }
+
+            is UploadReportState.SuccessUploadReport -> {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.DashboardScreen.route) {
+                        popUpTo(Screen.DashboardScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+
+            is UploadReportState.FailUploadReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        uploadReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is UploadReportState.ErrorUploadReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        uploadReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun UploadReportForm(
+    onEvent: (UploadReportEvent) -> Unit,
+    uploadReportState: UploadReportState,
     context: Context,
     photo: File?,
     violation: String,
@@ -142,7 +201,9 @@ fun UploadReportForm(
     date: String,
     onDateChanged: (String) -> Unit,
     time: String,
-    onTimeChanged: (String) -> Unit
+    onTimeChanged: (String) -> Unit,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
@@ -236,6 +297,7 @@ fun UploadReportForm(
                     onValueChange = {},
                     trailingIcon = {
                         Icon(
+                            modifier = Modifier.size(20.dp),
                             imageVector = EvaIcons.Outline.Calendar,
                             contentDescription = "Date icon"
                         )
@@ -248,7 +310,7 @@ fun UploadReportForm(
                         fontSize = 14.sp
                     )
                 )
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(22.dp))
                 TextField(
                     modifier = Modifier
                         .weight(2f)
@@ -259,6 +321,7 @@ fun UploadReportForm(
                     onValueChange = {},
                     trailingIcon = {
                         Icon(
+                            modifier = Modifier.size(22.dp),
                             imageVector = EvaIcons.Outline.Clock,
                             contentDescription = "Time icon"
                         )
@@ -277,8 +340,16 @@ fun UploadReportForm(
                 modifier = Modifier.fillMaxWidth(),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-                enabled = true,
-                onClick = {}
+                enabled = uploadReportState != UploadReportState.UploadingReport,
+                onClick = {
+                    if (photo != null && violation.isNotEmpty() && location.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()) {
+                        onEvent(UploadReportEvent.UploadReport)
+                    } else {
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
+                        }
+                    }
+                }
             ) {
                 Text(
                     modifier = Modifier.padding(5.dp),

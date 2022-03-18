@@ -88,7 +88,7 @@ fun UploadReportScreen(
         topBar = {
             if (!cameraScreenVis) {
                 CustomToolbar(
-                    title = "Unggah Laporan",
+                    title = "Upload Laporan",
                     onBackBtnClicked = { onBackConfirmationDlgVisChanged(true) }
                 )
             }

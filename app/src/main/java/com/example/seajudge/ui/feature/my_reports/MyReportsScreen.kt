@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,10 +20,6 @@ import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.common.component.MediumProgressBar
 import com.example.seajudge.ui.common.component.ReportCard
 import com.example.seajudge.ui.theme.Primary
-import com.example.seajudge.ui.theme.Red
-import compose.icons.EvaIcons
-import compose.icons.evaicons.Fill
-import compose.icons.evaicons.fill.LogOut
 import kotlinx.coroutines.launch
 
 @Composable

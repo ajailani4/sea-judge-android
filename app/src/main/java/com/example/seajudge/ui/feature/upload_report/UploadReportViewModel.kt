@@ -15,6 +15,10 @@ class UploadReportViewModel @Inject constructor(
     var cameraScreenVis by mutableStateOf(true)
     var backConfirmationDlgVis by mutableStateOf(false)
     var photo by mutableStateOf<File?>(null)
+    var violation by mutableStateOf("")
+    var location by mutableStateOf("")
+    var date by mutableStateOf("")
+    var time by mutableStateOf("")
 
     fun onCameraScreenVisChanged(visibility: Boolean) {
         cameraScreenVis = visibility
@@ -26,5 +30,21 @@ class UploadReportViewModel @Inject constructor(
 
     fun onPhotoChanged(file: File?) {
         photo = file
+    }
+
+    fun onViolationChanged(text: String) {
+        violation = text
+    }
+
+    fun onLocationChanged(text: String) {
+        location = text
+    }
+
+    fun onDateChanged(text: String) {
+        date = text
+    }
+
+    fun onTimeChanged(text: String) {
+        time = text
     }
 }

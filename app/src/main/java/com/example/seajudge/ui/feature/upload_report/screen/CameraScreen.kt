@@ -31,10 +31,9 @@ fun CameraScreen(
             onImageCaptured = { file ->
                 onImageCaptured(file)
                 onCameraScreenVisChanged(false)
-                Log.d("PhotoFile", file.toString())
             },
             onError = { exception ->
-
+                Log.e("CameraViewErr", exception.toString())
             }
         )
     }

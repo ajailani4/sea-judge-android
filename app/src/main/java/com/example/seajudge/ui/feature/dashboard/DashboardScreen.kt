@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
+import com.example.seajudge.ui.Screen
+import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.common.component.MediumProgressBar
 import com.example.seajudge.ui.common.component.ReportCard
@@ -48,12 +50,15 @@ fun DashboardScreen(
 ) {
     val onEvent = dashboardViewModel::onEvent
     val reportsState = dashboardViewModel.reportsState
+    val logoutState = dashboardViewModel.logoutState
     val searchQuery = dashboardViewModel.searchQuery
     val onSearchQueryChanged = dashboardViewModel::onSearchQueryChanged
     val selectedReportImg = dashboardViewModel.selectedReportImg
     val onSelectedReportImgChanged = dashboardViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = dashboardViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = dashboardViewModel::onFulLSizeImgVisChanged
+    val logoutConfirmDlgVis = dashboardViewModel.logoutConfirmDlgVis
+    val onLogoutConfirmDlgVisChanged = dashboardViewModel::onLogoutConfirmDlgVisChanged
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -71,7 +76,9 @@ fun DashboardScreen(
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
-                    DashboardHeader()
+                    DashboardHeader(
+                        onLogoutConfirmDlgVisChanged = onLogoutConfirmDlgVisChanged
+                    )
                     Spacer(modifier = Modifier.height(15.dp))
                     SearchTextField(
                         onEvent = onEvent,
@@ -137,12 +144,41 @@ fun DashboardScreen(
                     onVisibilityChanged = onFulLSizeImgVisChanged
                 )
             }
+
+            // Logout confirmation dialog
+            if (logoutConfirmDlgVis) {
+                CustomAlertDialog(
+                    onVisibilityChanged = onLogoutConfirmDlgVisChanged,
+                    title = "Logout",
+                    message = "Apakah kamu yakin ingin logout?",
+                    onConfirmClicked = {
+                        onLogoutConfirmDlgVisChanged(false)
+                        onEvent(DashboardEvent.Logout)
+                    },
+                    onDismissClicked = { onLogoutConfirmDlgVisChanged(false) }
+                )
+            }
+        }
+
+        // Observe logout state
+        when (logoutState) {
+            is DashboardState.SuccessLogout -> {
+                navController.navigate(Screen.LoginScreen.route) {
+                    launchSingleTop = true
+
+                    popUpTo(Screen.DashboardScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 }
 
 @Composable
-fun DashboardHeader() {
+fun DashboardHeader(onLogoutConfirmDlgVisChanged: (Boolean) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -162,7 +198,7 @@ fun DashboardHeader() {
                 style = MaterialTheme.typography.h2
             )
         }
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { onLogoutConfirmDlgVisChanged(true) }) {
             Icon(
                 modifier = Modifier.sizeIn(27.dp),
                 imageVector = EvaIcons.Fill.LogOut,

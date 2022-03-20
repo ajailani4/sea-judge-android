@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seajudge.domain.use_case.report.GetReportsUseCase
+import com.example.seajudge.domain.use_case.user_credential.DeleteAccessTokenUseCase
+import com.example.seajudge.domain.use_case.user_credential.DeleteUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -13,12 +15,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val getReportsUseCase: GetReportsUseCase
+    private val getReportsUseCase: GetReportsUseCase,
+    private val deleteUsernameUseCase: DeleteUsernameUseCase,
+    private val deleteAccessTokenUseCase: DeleteAccessTokenUseCase
 ) : ViewModel() {
     var reportsState by mutableStateOf<DashboardState>(DashboardState.Idle)
+    var logoutState by mutableStateOf<DashboardState>(DashboardState.Idle)
     var searchQuery by mutableStateOf<String?>(null)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
+    var logoutConfirmDlgVis by mutableStateOf(false)
 
     init {
         onEvent(DashboardEvent.LoadReports)
@@ -26,7 +32,9 @@ class DashboardViewModel @Inject constructor(
 
     fun onEvent(event: DashboardEvent) {
         when (event) {
-            is DashboardEvent.LoadReports -> getReports()
+            DashboardEvent.LoadReports -> getReports()
+
+            DashboardEvent.Logout -> logout()
         }
     }
 
@@ -40,6 +48,10 @@ class DashboardViewModel @Inject constructor(
 
     fun onFulLSizeImgVisChanged(visibility: Boolean) {
         fullSizeImgVis = visibility
+    }
+
+    fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
+        logoutConfirmDlgVis = visibility
     }
 
     private fun getReports() {
@@ -60,5 +72,11 @@ class DashboardViewModel @Inject constructor(
                 DashboardState.ErrorReports("Error")
             }
         }
+    }
+
+    private fun logout() {
+        deleteUsernameUseCase.invoke()
+        deleteAccessTokenUseCase.invoke()
+        logoutState = DashboardState.SuccessLogout
     }
 }

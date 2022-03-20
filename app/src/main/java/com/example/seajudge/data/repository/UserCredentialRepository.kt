@@ -19,7 +19,7 @@ class UserCredentialRepository @Inject constructor(
     fun getAccessToken() = userCredentialLocalDataSource.getAccessToken()
 
     fun deleteUsername() {
-        userCredentialLocalDataSource.deleteAccessToken()
+        userCredentialLocalDataSource.deleteUsername()
     }
 
     fun deleteAccessToken() {

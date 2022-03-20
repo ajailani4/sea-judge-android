@@ -31,10 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
-import com.example.seajudge.ui.common.component.CustomAlertDialog
-import com.example.seajudge.ui.common.component.FullSizeImage
-import com.example.seajudge.ui.common.component.MediumProgressBar
-import com.example.seajudge.ui.common.component.ReportCard
+import com.example.seajudge.ui.common.component.*
 import com.example.seajudge.ui.theme.*
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
@@ -112,6 +109,10 @@ fun DashboardScreen(
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))
+                                }
+                            } else {
+                                item {
+                                    EmptyItemIllustration()
                                 }
                             }
                         }

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
+import com.example.seajudge.ui.common.component.EmptyItemIllustration
 import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.common.component.MediumProgressBar
 import com.example.seajudge.ui.common.component.ReportCard
@@ -70,6 +71,10 @@ fun MyReportsScreen(
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))
+                                }
+                            } else {
+                                item {
+                                    EmptyItemIllustration()
                                 }
                             }
                         }

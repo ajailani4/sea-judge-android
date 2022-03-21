@@ -41,4 +41,13 @@ interface ApiService {
         @Part("date") date: RequestBody,
         @Part("time") time: RequestBody
     ): Response<BaseResponse<Any>>
+
+    @FormUrlEncoded
+    @PUT("reports/{id}")
+    suspend fun editReport(
+        @Field("violation") violation: String,
+        @Field("location") location: String,
+        @Field("date") date: String,
+        @Field("time") time: String
+    ): Response<BaseResponse<Any>>
 }

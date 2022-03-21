@@ -2,8 +2,10 @@ package com.example.seajudge.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.seajudge.ui.feature.dashboard.DashboardScreen
 import com.example.seajudge.ui.feature.edit_report.EditReportScreen
 import com.example.seajudge.ui.feature.login.LoginScreen
@@ -31,7 +33,24 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             UploadReportScreen(navController)
         }
 
-        composable(route = Screen.EditReportScreen.route) {
+        composable(
+            route = Screen.EditReportScreen.route +
+                "?violation={violation}&location={location}&date={date}&time={time}",
+            arguments = listOf(
+                navArgument("violation") {
+                    type = NavType.StringType
+                },
+                navArgument("location") {
+                    type = NavType.StringType
+                },
+                navArgument("date") {
+                    type = NavType.StringType
+                },
+                navArgument("time") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             EditReportScreen(navController)
         }
 

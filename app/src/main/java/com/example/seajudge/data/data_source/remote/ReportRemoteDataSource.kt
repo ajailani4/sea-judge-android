@@ -44,4 +44,16 @@ class ReportRemoteDataSource @Inject constructor(
             time = timePart
         )
     }
+
+    suspend fun editReport(
+        violation: String,
+        location: String,
+        date: String,
+        time: String
+    ) = apiService.editReport(
+        violation = violation,
+        location = location,
+        date = date,
+        time = time
+    )
 }

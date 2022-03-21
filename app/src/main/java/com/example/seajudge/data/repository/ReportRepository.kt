@@ -26,4 +26,16 @@ class ReportRepository @Inject constructor(
         date = date,
         time = time
     )
+
+    suspend fun editReport(
+        violation: String,
+        location: String,
+        date: String,
+        time: String
+    ) = reportRemoteDataSource.editReport(
+        violation = violation,
+        location = location,
+        date = date,
+        time = time
+    )
 }

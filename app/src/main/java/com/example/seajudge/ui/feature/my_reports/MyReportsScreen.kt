@@ -71,7 +71,10 @@ fun MyReportsScreen(
                                             onFulLSizeImgVisChanged(true)
                                         },
                                         onEditBtnClicked = {
-                                            navController.navigate(Screen.EditReportScreen.route)
+                                            navController.navigate(
+                                                Screen.EditReportScreen.route +
+                                                    "?violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
+                                            )
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))

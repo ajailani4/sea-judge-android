@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.CustomToolbar
+import com.example.seajudge.ui.common.component.FullSizeProgressBar
 import com.example.seajudge.ui.feature.upload_report.UploadReportState
 import com.example.seajudge.ui.feature.upload_report.event.UploadReportEvent
 import com.example.seajudge.ui.theme.DarkGrey
@@ -42,6 +45,8 @@ fun EditReportScreen(
     navController: NavController,
     editReportViewModel: EditReportViewModel = hiltViewModel()
 ) {
+    val onEvent = editReportViewModel::onEvent
+    val editReportState = editReportViewModel.editReportState
     val backConfirmDlgVis = editReportViewModel.backConfirmDlgVis
     val onBackConfirmDlgVisChanged = editReportViewModel::onBackConfirmDlgVisChanged
     val violation = editReportViewModel.violation
@@ -191,10 +196,10 @@ fun EditReportScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-                    enabled = /*editReportState != UploadReportState.UploadingReport*/true,
+                    enabled = editReportState != EditReportState.EditingReport,
                     onClick = {
                         if (violation.isNotEmpty() && location.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()) {
-                            /*onEvent()*/
+                            onEvent(EditReportEvent.EditReport)
                         } else {
                             coroutineScope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("Isi form dengan lengkap!")
@@ -228,6 +233,45 @@ fun EditReportScreen(
                     },
                     onDismissClicked = { onBackConfirmDlgVisChanged(false) }
                 )
+            }
+        }
+
+        // Observe edit report state
+        when (editReportState) {
+            is EditReportState.Idle -> {}
+
+            is EditReportState.EditingReport -> {
+                FullSizeProgressBar()
+            }
+
+            is EditReportState.SuccessEditReport -> {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.DashboardScreen.route) {
+                        popUpTo(Screen.DashboardScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+
+            is EditReportState.FailEditReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is EditReportState.ErrorEditReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
             }
         }
     }

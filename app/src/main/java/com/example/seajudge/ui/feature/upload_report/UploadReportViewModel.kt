@@ -1,6 +1,5 @@
 package com.example.seajudge.ui.feature.upload_report
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,7 +20,7 @@ class UploadReportViewModel @Inject constructor(
 ) : ViewModel() {
     var uploadReportState by mutableStateOf<UploadReportState>(UploadReportState.Idle)
     var cameraScreenVis by mutableStateOf(true)
-    var backConfirmationDlgVis by mutableStateOf(false)
+    var backConfirmDlgVis by mutableStateOf(false)
     var photo by mutableStateOf<File?>(null)
     var violation by mutableStateOf("")
     var location by mutableStateOf("")
@@ -38,8 +37,8 @@ class UploadReportViewModel @Inject constructor(
         cameraScreenVis = visibility
     }
 
-    fun onBackConfirmationDlgVis(visibility: Boolean) {
-        backConfirmationDlgVis = visibility
+    fun onBackConfirmDlgVisChanged(visibility: Boolean) {
+        backConfirmDlgVis = visibility
     }
 
     fun onPhotoChanged(file: File?) {

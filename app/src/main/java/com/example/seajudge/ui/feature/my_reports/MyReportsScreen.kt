@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
+import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.EmptyItemIllustration
 import com.example.seajudge.ui.common.component.FullSizeImage
 import com.example.seajudge.ui.common.component.MediumProgressBar
@@ -68,6 +69,9 @@ fun MyReportsScreen(
                                         onImageClicked = {
                                             onSelectedReportImgChanged(myReport.photo)
                                             onFulLSizeImgVisChanged(true)
+                                        },
+                                        onEditBtnClicked = {
+                                            navController.navigate(Screen.EditReportScreen.route)
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))

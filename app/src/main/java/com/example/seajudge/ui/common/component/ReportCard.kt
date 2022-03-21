@@ -30,7 +30,8 @@ import compose.icons.evaicons.outline.Pin
 fun ReportCard(
     report: Report,
     isEditable: Boolean? = false,
-    onImageClicked: () -> Unit
+    onImageClicked: () -> Unit,
+    onEditBtnClicked: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -52,7 +53,7 @@ fun ReportCard(
 
                 if (isEditable == true) {
                     Icon(
-                        modifier = Modifier.clickable(onClick = {}),
+                        modifier = Modifier.clickable(onClick = onEditBtnClicked),
                         imageVector = EvaIcons.Outline.Edit,
                         tint = Secondary,
                         contentDescription = "Edit report icon"

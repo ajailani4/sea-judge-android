@@ -64,8 +64,8 @@ fun UploadReportScreen(
     val uploadReportState = uploadReportViewModel.uploadReportState
     val cameraScreenVis = uploadReportViewModel.cameraScreenVis
     val onCameraScreenVisChanged = uploadReportViewModel::onCameraScreenVisChanged
-    val backConfirmationDlgVis = uploadReportViewModel.backConfirmationDlgVis
-    val onBackConfirmationDlgVisChanged = uploadReportViewModel::onBackConfirmationDlgVis
+    val backConfirmDlgVis = uploadReportViewModel.backConfirmDlgVis
+    val onBackConfirmDlgVisChanged = uploadReportViewModel::onBackConfirmDlgVisChanged
     val photo = uploadReportViewModel.photo
     val onPhotoChanged = uploadReportViewModel::onPhotoChanged
     val violation = uploadReportViewModel.violation
@@ -89,7 +89,7 @@ fun UploadReportScreen(
             if (!cameraScreenVis) {
                 CustomToolbar(
                     title = "Upload Laporan",
-                    onBackBtnClicked = { onBackConfirmationDlgVisChanged(true) }
+                    onBackBtnClicked = { onBackConfirmDlgVisChanged(true) }
                 )
             }
         }
@@ -128,20 +128,20 @@ fun UploadReportScreen(
             }
 
             BackHandler {
-                onBackConfirmationDlgVisChanged(true)
+                onBackConfirmDlgVisChanged(true)
             }
             
             // Back confirmation dialog
-            if (backConfirmationDlgVis) {
+            if (backConfirmDlgVis) {
                 CustomAlertDialog(
-                    onVisibilityChanged = onBackConfirmationDlgVisChanged,
+                    onVisibilityChanged = onBackConfirmDlgVisChanged,
                     title = "Keluar dari halaman unggah",
                     message = "Apakah kamu yakin ingin membatalkan unggah laporan?",
                     onConfirmClicked = {
                         navController.navigateUp()
-                        onBackConfirmationDlgVisChanged(false)
+                        onBackConfirmDlgVisChanged(false)
                     },
-                    onDismissClicked = { onBackConfirmationDlgVisChanged(false) }
+                    onDismissClicked = { onBackConfirmDlgVisChanged(false) }
                 )
             }
         }

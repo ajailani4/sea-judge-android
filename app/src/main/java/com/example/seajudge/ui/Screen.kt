@@ -19,6 +19,8 @@ sealed class Screen(
 
     object UploadReportScreen : Screen("upload_report_screen")
 
+    object EditReportScreen : Screen("edit_report_screen")
+
     object DashboardScreen : Screen(
         route = "dashboard_screen",
         title = "Dashboard",

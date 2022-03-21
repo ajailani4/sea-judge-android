@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.seajudge.ui.theme.Grey
 import com.example.seajudge.ui.theme.Primary
@@ -29,26 +31,26 @@ fun BottomBar(navController: NavController) {
         val navBarStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBarStackEntry?.destination?.route
 
-        items.map {
+        items.map { screen ->
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = it.icon!!,
-                        contentDescription = it.title
+                        imageVector = screen.icon!!,
+                        contentDescription = screen.title
                     )
                 },
                 label = {
                     Text(
-                        text = it.title!!,
+                        text = screen.title!!,
                         fontFamily = poppinsFamily
                     )
                 },
-                selected = currentRoute == it.route,
+                selected = currentRoute == screen.route,
                 selectedContentColor = Primary,
                 unselectedContentColor = Grey,
                 onClick = {
-                    navController.navigate(it.route) {
-                        popUpTo(Screen.DashboardScreen.route) {
+                    navController.navigate(screen.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
                         launchSingleTop = true

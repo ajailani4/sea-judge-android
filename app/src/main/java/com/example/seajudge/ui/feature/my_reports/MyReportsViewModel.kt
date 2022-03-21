@@ -18,7 +18,7 @@ class MyReportsViewModel @Inject constructor(
     private val getMyReportsUseCase: GetUserReportsUseCase,
     private val getUsernameUseCase: GetUsernameUseCase
 ) : ViewModel() {
-    var myReportsState by mutableStateOf<MyReportsState>(MyReportsState.LoadingMyReports)
+    var myReportsState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
 
@@ -42,6 +42,8 @@ class MyReportsViewModel @Inject constructor(
 
     private fun getMyReports() {
         viewModelScope.launch {
+            myReportsState = MyReportsState.LoadingMyReports
+
             myReportsState = try {
                 val response = getMyReportsUseCase.invoke(getUsernameUseCase.invoke()!!)
 

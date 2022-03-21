@@ -23,7 +23,7 @@ fun EmptyItemIllustration() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.size(210.dp, 226.dp),
+            modifier = Modifier.size(200.dp, 216.dp),
             painter = painterResource(id = R.drawable.img_empty_item),
             contentDescription = "Empty item illustration"
         )

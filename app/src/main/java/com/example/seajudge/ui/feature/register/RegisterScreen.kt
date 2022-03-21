@@ -39,7 +39,6 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.*
-import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.outline.Eye
 import compose.icons.evaicons.outline.EyeOff
 import compose.icons.evaicons.outline.Person

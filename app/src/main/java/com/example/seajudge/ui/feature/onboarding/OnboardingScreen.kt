@@ -3,17 +3,13 @@ package com.example.seajudge.ui.feature.onboarding
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterEnd
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -41,7 +37,7 @@ fun OnboardingScreen(navController: NavController) {
     )
     val pagerState = rememberPagerState(initialPage = 0)
     val scope = rememberCoroutineScope()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +68,7 @@ fun OnboardingScreen(navController: NavController) {
                 )
             }
         }
-        
+
         HorizontalPager(
             modifier = Modifier
                 .fillMaxSize()
@@ -82,7 +78,7 @@ fun OnboardingScreen(navController: NavController) {
         ) { index ->
             OnboardingItemScreen(item = onboardingItems[index])
         }
-        
+
         // Login and register button
         AnimatedVisibility(visible = pagerState.currentPage == onboardingItems.size - 1) {
             Column {

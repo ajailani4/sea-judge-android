@@ -26,8 +26,6 @@ import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.CustomToolbar
 import com.example.seajudge.ui.common.component.FullSizeProgressBar
-import com.example.seajudge.ui.feature.upload_report.UploadReportState
-import com.example.seajudge.ui.feature.upload_report.event.UploadReportEvent
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.poppinsFamily
@@ -57,13 +55,13 @@ fun EditReportScreen(
     val onDateChanged = editReportViewModel::onDateChanged
     val time = editReportViewModel.time
     val onTimeChanged = editReportViewModel::onTimeChanged
-    
+
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    
+
     val context = LocalContext.current
     (context as Activity).window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -73,9 +71,10 @@ fun EditReportScreen(
             )
         }
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 Spacer(modifier = Modifier.height(25.dp))

@@ -28,10 +28,11 @@ fun CustomToolbar(
     backgroundColor: Color = Primary,
     onBackBtnClicked: () -> Unit
 ) {
-    Box(modifier = Modifier
-        .background(color = backgroundColor)
-        .fillMaxWidth()
-        .padding(16.dp)
+    Box(
+        modifier = Modifier
+            .background(color = backgroundColor)
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),

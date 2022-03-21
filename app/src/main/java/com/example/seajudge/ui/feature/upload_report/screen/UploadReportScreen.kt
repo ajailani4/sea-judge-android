@@ -130,7 +130,7 @@ fun UploadReportScreen(
             BackHandler {
                 onBackConfirmDlgVisChanged(true)
             }
-            
+
             // Back confirmation dialog
             if (backConfirmDlgVis) {
                 CustomAlertDialog(
@@ -205,9 +205,10 @@ fun UploadReportForm(
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             if (photo != null) {

@@ -10,5 +10,6 @@ class UserRepository @Inject constructor(
 ) {
     suspend fun login(loginRequest: LoginRequest) = userRemoteDataSource.login(loginRequest)
 
-    suspend fun register(registerRequest: RegisterRequest) = userRemoteDataSource.register(registerRequest)
+    suspend fun register(registerRequest: RegisterRequest) =
+        userRemoteDataSource.register(registerRequest)
 }

@@ -1,7 +1,7 @@
 package com.example.seajudge.ui.feature.upload_report.screen
 
 import android.util.Log
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext

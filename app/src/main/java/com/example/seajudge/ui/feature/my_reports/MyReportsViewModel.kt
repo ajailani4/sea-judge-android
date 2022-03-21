@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.seajudge.domain.use_case.report.GetReportsUseCase
 import com.example.seajudge.domain.use_case.report.GetUserReportsUseCase
 import com.example.seajudge.domain.use_case.user_credential.GetUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel

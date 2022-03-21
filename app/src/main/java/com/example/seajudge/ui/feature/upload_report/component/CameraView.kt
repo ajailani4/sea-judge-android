@@ -1,14 +1,12 @@
 package com.example.seajudge.ui.feature.upload_report.component
 
 import android.content.Context
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
 import com.example.seajudge.ui.feature.upload_report.event.CameraMenuEvent
 import com.example.seajudge.util.convertInputStreamToFile
 import com.example.seajudge.util.takePicture

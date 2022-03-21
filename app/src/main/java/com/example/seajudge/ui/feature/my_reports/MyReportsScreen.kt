@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,7 +37,7 @@ fun MyReportsScreen(
     val onSelectedReportImgChanged = myReportsViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = myReportsViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = myReportsViewModel::onFulLSizeImgVisChanged
-    
+
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
@@ -86,7 +89,7 @@ fun MyReportsScreen(
                             }
                         }
                     }
-                    
+
                     is MyReportsState.Fail -> {
                         coroutineScope.launch {
                             myReportsState.message?.let { message ->
@@ -104,7 +107,7 @@ fun MyReportsScreen(
                     }
                 }
             }
-            
+
             // Full size image
             if (fullSizeImgVis) {
                 FullSizeImage(

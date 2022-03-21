@@ -10,7 +10,6 @@ import com.example.seajudge.domain.use_case.user_credential.DeleteAccessTokenUse
 import com.example.seajudge.domain.use_case.user_credential.DeleteUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel

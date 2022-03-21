@@ -97,12 +97,12 @@ fun Content(startDestination: String) {
                             }
 
                             cameraPermissionState.shouldShowRationale ||
-                            !cameraPermissionState.permissionRequested -> {
+                                !cameraPermissionState.permissionRequested -> {
                                 cameraPermissionState.launchPermissionRequest()
                             }
 
                             readExStoragePermissionState.shouldShowRationale ||
-                            !readExStoragePermissionState.permissionRequested -> {
+                                !readExStoragePermissionState.permissionRequested -> {
                                 readExStoragePermissionState.launchPermissionRequest()
                             }
                         }

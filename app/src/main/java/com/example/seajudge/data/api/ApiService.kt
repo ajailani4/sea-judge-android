@@ -45,6 +45,7 @@ interface ApiService {
     @FormUrlEncoded
     @PUT("reports/{id}")
     suspend fun editReport(
+        @Path("id") id: Int,
         @Field("violation") violation: String,
         @Field("location") location: String,
         @Field("date") date: String,

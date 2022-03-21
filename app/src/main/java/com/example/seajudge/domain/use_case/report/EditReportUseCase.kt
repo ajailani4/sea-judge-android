@@ -7,11 +7,13 @@ class EditReportUseCase @Inject constructor(
     private val reportRepository: ReportRepository
 ) {
     private suspend fun editReport(
+        id: Int,
         violation: String,
         location: String,
         date: String,
         time: String
     ) = reportRepository.editReport(
+        id = id,
         violation = violation,
         location = location,
         date = date,
@@ -19,11 +21,13 @@ class EditReportUseCase @Inject constructor(
     )
 
     suspend operator fun invoke(
+        id: Int,
         violation: String,
         location: String,
         date: String,
         time: String
     ) = editReport(
+        id = id,
         violation = violation,
         location = location,
         date = date,

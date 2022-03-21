@@ -55,6 +55,7 @@ class EditReportViewModel @Inject constructor(
 
             editReportState = try {
                 val response = editReportUseCase.invoke(
+                    id = savedStateHandle.get<Int>("id")!!,
                     violation = violation,
                     location = location,
                     date = date,

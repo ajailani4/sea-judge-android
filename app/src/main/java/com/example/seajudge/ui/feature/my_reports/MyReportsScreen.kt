@@ -76,7 +76,7 @@ fun MyReportsScreen(
                                         onEditBtnClicked = {
                                             navController.navigate(
                                                 Screen.EditReportScreen.route +
-                                                    "?violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
+                                                    "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
                                             )
                                         }
                                     )

@@ -70,7 +70,8 @@ fun Content(startDestination: String) {
         Screen.OnboardingScreen.route,
         Screen.LoginScreen.route,
         Screen.RegisterScreen.route,
-        Screen.UploadReportScreen.route
+        Screen.UploadReportScreen.route,
+        Screen.EditReportScreen.route
     )
 
     val cameraPermissionState =

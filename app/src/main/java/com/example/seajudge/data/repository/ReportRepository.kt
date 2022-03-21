@@ -28,11 +28,13 @@ class ReportRepository @Inject constructor(
     )
 
     suspend fun editReport(
+        id: Int,
         violation: String,
         location: String,
         date: String,
         time: String
     ) = reportRemoteDataSource.editReport(
+        id = id,
         violation = violation,
         location = location,
         date = date,

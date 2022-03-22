@@ -245,8 +245,8 @@ fun EditReportScreen(
 
             is EditReportState.SuccessEditReport -> {
                 LaunchedEffect(Unit) {
-                    navController.navigate(Screen.DashboardScreen.route) {
-                        popUpTo(Screen.DashboardScreen.route) {
+                    navController.navigate(Screen.MyReportsScreen.route) {
+                        popUpTo(Screen.MyReportsScreen.route) {
                             inclusive = true
                         }
                     }

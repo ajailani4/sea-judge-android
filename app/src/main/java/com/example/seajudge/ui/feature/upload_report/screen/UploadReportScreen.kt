@@ -117,7 +117,7 @@ fun UploadReportScreen(
                 exit = shrinkVertically()
             ) {
                 CameraScreen(
-                    onBackBtnClicked = { navController.navigateUp() },
+                    onBackBtnClicked = { onBackConfirmDlgVisChanged(true) },
                     onCameraScreenVisChanged = onCameraScreenVisChanged,
                     onImageCaptured = { photo ->
                         coroutineScope.launch {

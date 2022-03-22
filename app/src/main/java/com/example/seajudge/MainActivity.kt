@@ -66,12 +66,9 @@ fun Content(startDestination: String) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val hasNoBottomMenuRoutes = listOf(
-        Screen.OnboardingScreen.route,
-        Screen.LoginScreen.route,
-        Screen.RegisterScreen.route,
-        Screen.UploadReportScreen.route,
-        Screen.EditReportScreen.route
+    val hasBottomMenuRoutes = listOf(
+        Screen.DashboardScreen.route,
+        Screen.MyReportsScreen.route
     )
 
     val cameraPermissionState =
@@ -81,12 +78,12 @@ fun Content(startDestination: String) {
 
     Scaffold(
         bottomBar = {
-            if (!hasNoBottomMenuRoutes.contains(currentRoute)) {
+            if (hasBottomMenuRoutes.contains(currentRoute)) {
                 BottomBar(navController)
             }
         },
         floatingActionButton = {
-            if (!hasNoBottomMenuRoutes.contains(currentRoute)) {
+            if (hasBottomMenuRoutes.contains(currentRoute)) {
                 FloatingActionButton(
                     shape = CircleShape,
                     backgroundColor = Primary,

@@ -26,6 +26,7 @@ class MyReportsViewModel @Inject constructor(
     var myReportsState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
     var logoutState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
     var deleteReportState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
+    var swipeRefreshing by mutableStateOf(false)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
     private var deletedReport by mutableStateOf(0)
@@ -38,12 +39,18 @@ class MyReportsViewModel @Inject constructor(
 
     fun onEvent(event: MyReportsEvent) {
         when (event) {
+            MyReportsEvent.Idle -> idle()
+
             MyReportsEvent.LoadMyReports -> getMyReports()
 
             MyReportsEvent.DeleteReport -> deleteReport()
 
             MyReportsEvent.Logout -> logout()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onSelectedReportImgChanged(image: String) {
@@ -64,6 +71,10 @@ class MyReportsViewModel @Inject constructor(
 
     fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
         logoutConfirmDlgVis = visibility
+    }
+
+    private fun idle() {
+        deleteReportState = MyReportsState.Idle
     }
 
     private fun getMyReports() {

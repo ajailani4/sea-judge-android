@@ -33,6 +33,9 @@ import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.*
 import com.example.seajudge.ui.theme.*
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
@@ -41,12 +44,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DashboardScreen(
-    navController: NavController,
-    dashboardViewModel: DashboardViewModel = hiltViewModel()
-) {
+fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
     val onEvent = dashboardViewModel::onEvent
     val reportsState = dashboardViewModel.reportsState
+    val swipeRefreshing = dashboardViewModel.swipeRefreshing
+    val onSwipeRefreshingChanged = dashboardViewModel::onSwipeRefreshingChanged
     val searchQuery = dashboardViewModel.searchQuery
     val onSearchQueryChanged = dashboardViewModel::onSearchQueryChanged
     val selectedReportImg = dashboardViewModel.selectedReportImg
@@ -64,81 +66,96 @@ fun DashboardScreen(
     val localFocusManager = LocalFocusManager.current
 
     Scaffold(scaffoldState = scaffoldState) {
-        Box {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(20.dp)
-            ) {
-                item {
-                    DashboardHeader()
-                    Spacer(modifier = Modifier.height(15.dp))
-                    SearchTextField(
-                        onEvent = onEvent,
-                        searchQuery = searchQuery,
-                        onSearchQueryChanged = onSearchQueryChanged,
-                        keyboardController = keyboardController,
-                        localFocusManager = localFocusManager
-                    )
-                    Spacer(modifier = Modifier.height(30.dp))
-                }
-
-                // Observe reports state
-                when (reportsState) {
-                    is DashboardState.LoadingReports -> {
-                        item {
-                            MediumProgressBar()
-                        }
-                    }
-
-                    is DashboardState.Reports -> {
-                        val reports = reportsState.reports
-
-                        if (reports != null) {
-                            if (reports.isNotEmpty()) {
-                                items(reports) { report ->
-                                    ReportCard(
-                                        report = report,
-                                        onImageClicked = {
-                                            onSelectedReportImgChanged(report.photo)
-                                            onFulLSizeImgVisChanged(true)
-                                        }
-                                    )
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                }
-                            } else {
-                                item {
-                                    EmptyItemIllustration()
-                                }
-                            }
-                        }
-                    }
-
-                    is DashboardState.FailReports -> {
-                        coroutineScope.launch {
-                            reportsState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
-                            }
-                        }
-                    }
-
-                    is DashboardState.ErrorReports -> {
-                        coroutineScope.launch {
-                            reportsState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
-                            }
-                        }
-                    }
-
-                    else -> {}
-                }
-            }
-
-            // Full size image
-            if (fullSizeImgVis) {
-                FullSizeImage(
-                    image = selectedReportImg,
-                    onVisibilityChanged = onFulLSizeImgVisChanged
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
+            onRefresh = {
+                onSwipeRefreshingChanged(false)
+                onEvent(DashboardEvent.LoadReports)
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    contentColor = Primary
                 )
+            }
+        ) {
+            Box {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(20.dp)
+                ) {
+                    item {
+                        DashboardHeader()
+                        Spacer(modifier = Modifier.height(15.dp))
+                        SearchTextField(
+                            onEvent = onEvent,
+                            searchQuery = searchQuery,
+                            onSearchQueryChanged = onSearchQueryChanged,
+                            keyboardController = keyboardController,
+                            localFocusManager = localFocusManager
+                        )
+                        Spacer(modifier = Modifier.height(30.dp))
+                    }
+
+                    // Observe reports state
+                    when (reportsState) {
+                        is DashboardState.LoadingReports -> {
+                            item {
+                                MediumProgressBar()
+                            }
+                        }
+
+                        is DashboardState.Reports -> {
+                            val reports = reportsState.reports
+
+                            if (reports != null) {
+                                if (reports.isNotEmpty()) {
+                                    items(reports) { report ->
+                                        ReportCard(
+                                            report = report,
+                                            onImageClicked = {
+                                                onSelectedReportImgChanged(report.photo)
+                                                onFulLSizeImgVisChanged(true)
+                                            }
+                                        )
+                                        Spacer(modifier = Modifier.height(20.dp))
+                                    }
+                                } else {
+                                    item {
+                                        EmptyItemIllustration()
+                                    }
+                                }
+                            }
+                        }
+
+                        is DashboardState.FailReports -> {
+                            coroutineScope.launch {
+                                reportsState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+
+                        is DashboardState.ErrorReports -> {
+                            coroutineScope.launch {
+                                reportsState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+
+                        else -> {}
+                    }
+                }
+
+                // Full size image
+                if (fullSizeImgVis) {
+                    FullSizeImage(
+                        image = selectedReportImg,
+                        onVisibilityChanged = onFulLSizeImgVisChanged
+                    )
+                }
             }
         }
     }

@@ -6,8 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seajudge.domain.use_case.report.GetReportsUseCase
-import com.example.seajudge.domain.use_case.user_credential.DeleteAccessTokenUseCase
-import com.example.seajudge.domain.use_case.user_credential.DeleteUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +15,7 @@ class DashboardViewModel @Inject constructor(
     private val getReportsUseCase: GetReportsUseCase
 ) : ViewModel() {
     var reportsState by mutableStateOf<DashboardState>(DashboardState.Idle)
+    var swipeRefreshing by mutableStateOf(false)
     var searchQuery by mutableStateOf<String?>(null)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
@@ -29,6 +28,10 @@ class DashboardViewModel @Inject constructor(
         when (event) {
             DashboardEvent.LoadReports -> getReports()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onSearchQueryChanged(query: String? = null) {

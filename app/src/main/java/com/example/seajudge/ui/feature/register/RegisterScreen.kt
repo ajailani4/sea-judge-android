@@ -69,7 +69,6 @@ fun RegisterScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(scaffoldState = scaffoldState) {
         Column(
@@ -279,7 +278,6 @@ fun RegisterScreen(
                             username.isNotEmpty() && name.isNotEmpty() && state.isNotEmpty() &&
                             job.isNotEmpty() && phoneNumber.isNotEmpty() && password.isNotEmpty()
                         ) {
-                            keyboardController?.hide()
                             onEvent(RegisterEvent.Submit)
                         } else {
                             coroutineScope.launch {

@@ -61,7 +61,6 @@ fun LoginScreen(
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(scaffoldState = scaffoldState) {
         Column(
@@ -157,7 +156,6 @@ fun LoginScreen(
                     enabled = loginState != LoginState.LoggingIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
-                            keyboardController?.hide()
                             onEvent(LoginEvent.Submit)
                         } else {
                             coroutineScope.launch {

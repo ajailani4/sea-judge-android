@@ -23,6 +23,9 @@ import com.example.seajudge.ui.feature.dashboard.DashboardEvent
 import com.example.seajudge.ui.feature.dashboard.DashboardState
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.Red
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
@@ -37,6 +40,8 @@ fun MyReportsScreen(
     val myReportsState = myReportsViewModel.myReportsState
     val deleteReportState = myReportsViewModel.deleteReportState
     val logoutState = myReportsViewModel.logoutState
+    val swipeRefreshing = myReportsViewModel.swipeRefreshing
+    val onSwipeRefreshingChanged = myReportsViewModel::onSwipeRefreshingChanged
     val selectedReportImg = myReportsViewModel.selectedReportImg
     val onSelectedReportImgChanged = myReportsViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = myReportsViewModel.fullSizeImgVis
@@ -51,114 +56,129 @@ fun MyReportsScreen(
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(scaffoldState = scaffoldState) {
-        Box {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(20.dp)
-            ) {
-                item {
-                    MyReportsHeader(onLogoutConfirmDlgVisChanged)
-                    Spacer(modifier = Modifier.height(20.dp))
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
+            onRefresh = {
+                onSwipeRefreshingChanged(false)
+                onEvent(MyReportsEvent.LoadMyReports)
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    contentColor = Primary
+                )
+            }
+        ) {
+            Box {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(20.dp)
+                ) {
+                    item {
+                        MyReportsHeader(onLogoutConfirmDlgVisChanged)
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+
+                    // Observe my reports state
+                    when (myReportsState) {
+                        is MyReportsState.LoadingMyReports -> {
+                            item {
+                                MediumProgressBar()
+                            }
+                        }
+
+                        is MyReportsState.MyReports -> {
+                            val myReports = myReportsState.myReports
+
+                            if (myReports != null) {
+                                if (myReports.isNotEmpty()) {
+                                    items(myReports) { myReport ->
+                                        ReportCard(
+                                            report = myReport,
+                                            isEditable = true,
+                                            onImageClicked = {
+                                                onSelectedReportImgChanged(myReport.photo)
+                                                onFulLSizeImgVisChanged(true)
+                                            },
+                                            onEditBtnClicked = {
+                                                navController.navigate(
+                                                    Screen.EditReportScreen.route +
+                                                        "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
+                                                )
+                                            },
+                                            onDeleteBtnClicked = {
+                                                onDeletedReportChanged(myReport.id)
+                                                onDeletedReportDlgVisChanged(true)
+                                            }
+                                        )
+                                        Spacer(modifier = Modifier.height(20.dp))
+                                    }
+                                } else {
+                                    item {
+                                        EmptyItemIllustration()
+                                    }
+                                }
+                            }
+                        }
+
+                        is MyReportsState.FailMyReports -> {
+                            coroutineScope.launch {
+                                myReportsState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+
+                        is MyReportsState.ErrorMyReports -> {
+                            coroutineScope.launch {
+                                myReportsState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+
+                        else -> {}
+                    }
                 }
 
-                // Observe my reports state
-                when (myReportsState) {
-                    is MyReportsState.LoadingMyReports -> {
-                        item {
-                            MediumProgressBar()
-                        }
-                    }
-
-                    is MyReportsState.MyReports -> {
-                        val myReports = myReportsState.myReports
-
-                        if (myReports != null) {
-                            if (myReports.isNotEmpty()) {
-                                items(myReports) { myReport ->
-                                    ReportCard(
-                                        report = myReport,
-                                        isEditable = true,
-                                        onImageClicked = {
-                                            onSelectedReportImgChanged(myReport.photo)
-                                            onFulLSizeImgVisChanged(true)
-                                        },
-                                        onEditBtnClicked = {
-                                            navController.navigate(
-                                                Screen.EditReportScreen.route +
-                                                    "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
-                                            )
-                                        },
-                                        onDeleteBtnClicked = {
-                                            onDeletedReportChanged(myReport.id)
-                                            onDeletedReportDlgVisChanged(true)
-                                        }
-                                    )
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                }
-                            } else {
-                                item {
-                                    EmptyItemIllustration()
-                                }
-                            }
-                        }
-                    }
-
-                    is MyReportsState.FailMyReports -> {
-                        coroutineScope.launch {
-                            myReportsState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
-                            }
-                        }
-                    }
-
-                    is MyReportsState.ErrorMyReports -> {
-                        coroutineScope.launch {
-                            myReportsState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
-                            }
-                        }
-                    }
-
-                    else -> {}
+                // Full size image
+                if (fullSizeImgVis) {
+                    FullSizeImage(
+                        image = selectedReportImg,
+                        onVisibilityChanged = onFulLSizeImgVisChanged
+                    )
                 }
-            }
 
-            // Full size image
-            if (fullSizeImgVis) {
-                FullSizeImage(
-                    image = selectedReportImg,
-                    onVisibilityChanged = onFulLSizeImgVisChanged
-                )
-            }
+                // Deleted report confirmation dialog
+                if (deletedReportDlgVis) {
+                    CustomAlertDialog(
+                        onVisibilityChanged = onDeletedReportDlgVisChanged,
+                        title = "Hapus Laporan",
+                        message = "Apakah kamu yakin ingin menghapus laporan ini?",
+                        onConfirmClicked = {
+                            onDeletedReportDlgVisChanged(false)
+                            onEvent(MyReportsEvent.DeleteReport)
+                        },
+                        onDismissClicked = {
+                            onDeletedReportDlgVisChanged(false)
+                        }
+                    )
+                }
 
-            // Deleted report confirmation dialog
-            if (deletedReportDlgVis) {
-                CustomAlertDialog(
-                    onVisibilityChanged = onDeletedReportDlgVisChanged,
-                    title = "Hapus Laporan",
-                    message = "Apakah kamu yakin ingin menghapus laporan ini?",
-                    onConfirmClicked = {
-                        onDeletedReportDlgVisChanged(false)
-                        onEvent(MyReportsEvent.DeleteReport)
-                    },
-                    onDismissClicked = {
-                        onDeletedReportDlgVisChanged(false)
-                    }
-                )
-            }
-
-            // Logout confirmation dialog
-            if (logoutConfirmDlgVis) {
-                CustomAlertDialog(
-                    onVisibilityChanged = onLogoutConfirmDlgVisChanged,
-                    title = "Logout",
-                    message = "Apakah kamu yakin ingin logout?",
-                    onConfirmClicked = {
-                        onLogoutConfirmDlgVisChanged(false)
-                        onEvent(MyReportsEvent.Logout)
-                    },
-                    onDismissClicked = { onLogoutConfirmDlgVisChanged(false) }
-                )
+                // Logout confirmation dialog
+                if (logoutConfirmDlgVis) {
+                    CustomAlertDialog(
+                        onVisibilityChanged = onLogoutConfirmDlgVisChanged,
+                        title = "Logout",
+                        message = "Apakah kamu yakin ingin logout?",
+                        onConfirmClicked = {
+                            onLogoutConfirmDlgVisChanged(false)
+                            onEvent(MyReportsEvent.Logout)
+                        },
+                        onDismissClicked = { onLogoutConfirmDlgVisChanged(false) }
+                    )
+                }
             }
         }
 
@@ -175,6 +195,7 @@ fun MyReportsScreen(
                     }
 
                     onEvent(MyReportsEvent.LoadMyReports)
+                    onEvent(MyReportsEvent.Idle)
                 }
             }
 

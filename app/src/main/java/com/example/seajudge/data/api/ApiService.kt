@@ -51,4 +51,9 @@ interface ApiService {
         @Field("date") date: String,
         @Field("time") time: String
     ): Response<BaseResponse<Any>>
+
+    @DELETE("reports/{id}")
+    suspend fun deleteReport(
+        @Path("id") id: Int
+    ): Response<BaseResponse<Any>>
 }

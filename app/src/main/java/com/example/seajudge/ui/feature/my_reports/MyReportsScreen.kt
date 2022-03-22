@@ -9,6 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,10 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
-import com.example.seajudge.ui.common.component.EmptyItemIllustration
-import com.example.seajudge.ui.common.component.FullSizeImage
-import com.example.seajudge.ui.common.component.MediumProgressBar
-import com.example.seajudge.ui.common.component.ReportCard
+import com.example.seajudge.ui.common.component.*
 import com.example.seajudge.ui.theme.Primary
 import kotlinx.coroutines.launch
 
@@ -32,11 +30,16 @@ fun MyReportsScreen(
     navController: NavController,
     myReportsViewModel: MyReportsViewModel = hiltViewModel()
 ) {
+    val onEvent = myReportsViewModel::onEvent
     val myReportsState = myReportsViewModel.myReportsState
+    val deleteReportState = myReportsViewModel.deleteReportState
     val selectedReportImg = myReportsViewModel.selectedReportImg
     val onSelectedReportImgChanged = myReportsViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = myReportsViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = myReportsViewModel::onFulLSizeImgVisChanged
+    val onDeletedReportChanged = myReportsViewModel::onDeletedReportChanged
+    val deletedReportDlgVis = myReportsViewModel.deletedReportDlgVis
+    val onDeletedReportDlgVisChanged = myReportsViewModel::onDeletedReportDlgVisChanged
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -78,6 +81,10 @@ fun MyReportsScreen(
                                                 Screen.EditReportScreen.route +
                                                     "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
                                             )
+                                        },
+                                        onDeleteBtnClicked = {
+                                            onDeletedReportChanged(myReport.id)
+                                            onDeletedReportDlgVisChanged(true)
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))
@@ -90,7 +97,7 @@ fun MyReportsScreen(
                         }
                     }
 
-                    is MyReportsState.Fail -> {
+                    is MyReportsState.FailMyReports -> {
                         coroutineScope.launch {
                             myReportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
@@ -98,13 +105,15 @@ fun MyReportsScreen(
                         }
                     }
 
-                    is MyReportsState.Error -> {
+                    is MyReportsState.ErrorMyReports -> {
                         coroutineScope.launch {
                             myReportsState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }
                     }
+
+                    else -> {}
                 }
             }
 
@@ -115,6 +124,61 @@ fun MyReportsScreen(
                     onVisibilityChanged = onFulLSizeImgVisChanged
                 )
             }
+
+            // Deleted report confirmation dialog
+            if (deletedReportDlgVis) {
+                CustomAlertDialog(
+                    onVisibilityChanged = onDeletedReportDlgVisChanged,
+                    title = "Hapus Laporan",
+                    message = "Apakah kamu yakin ingin menghapus laporan ini?",
+                    onConfirmClicked = {
+                        onDeletedReportDlgVisChanged(false)
+                        onEvent(MyReportsEvent.DeleteReport)
+                    },
+                    onDismissClicked = {
+                        onDeletedReportDlgVisChanged(false)
+                    }
+                )
+            }
+        }
+
+        // Observe delete report state
+        when (deleteReportState) {
+            is MyReportsState.DeletingReport -> {
+                FullSizeProgressBar()
+            }
+
+            is MyReportsState.SuccessDeleteReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar("Laporan berhasil dihapus")
+                    }
+
+                    onEvent(MyReportsEvent.LoadMyReports)
+                }
+            }
+
+            is MyReportsState.FailDeleteReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        deleteReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is MyReportsState.ErrorDeleteReport -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        deleteReportState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 }

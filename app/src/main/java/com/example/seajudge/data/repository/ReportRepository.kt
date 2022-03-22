@@ -40,4 +40,6 @@ class ReportRepository @Inject constructor(
         date = date,
         time = time
     )
+
+    suspend fun deleteReport(id: Int) = reportRemoteDataSource.deleteReport(id)
 }

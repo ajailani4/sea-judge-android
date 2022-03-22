@@ -21,12 +21,14 @@ import coil.compose.rememberImagePainter
 import com.example.seajudge.data.model.Report
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
+import com.example.seajudge.ui.theme.Red
 import com.example.seajudge.ui.theme.Secondary
 import com.example.seajudge.util.Formatter
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Edit
 import compose.icons.evaicons.outline.Pin
+import compose.icons.evaicons.outline.Trash
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -34,7 +36,8 @@ fun ReportCard(
     report: Report,
     isEditable: Boolean? = false,
     onImageClicked: () -> Unit,
-    onEditBtnClicked: () -> Unit = {}
+    onEditBtnClicked: () -> Unit = {},
+    onDeleteBtnClicked: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -55,12 +58,23 @@ fun ReportCard(
                 )
 
                 if (isEditable == true) {
-                    Icon(
-                        modifier = Modifier.clickable(onClick = onEditBtnClicked),
-                        imageVector = EvaIcons.Outline.Edit,
-                        tint = Secondary,
-                        contentDescription = "Edit report icon"
-                    )
+                    Row {
+                        Icon(
+                            modifier = Modifier.clickable(onClick = onEditBtnClicked),
+                            imageVector = EvaIcons.Outline.Edit,
+                            tint = Secondary,
+                            contentDescription = "Edit report icon"
+                        )
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Icon(
+                            modifier = Modifier
+                                .size(22.dp)
+                                .clickable(onClick = onDeleteBtnClicked),
+                            imageVector = EvaIcons.Outline.Trash,
+                            tint = Red,
+                            contentDescription = "Delete report icon"
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))

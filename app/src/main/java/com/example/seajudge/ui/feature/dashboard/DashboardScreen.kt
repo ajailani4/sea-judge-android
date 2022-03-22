@@ -164,7 +164,7 @@ fun DashboardScreen(
         // Observe logout state
         when (logoutState) {
             is DashboardState.SuccessLogout -> {
-                navController.navigate(Screen.LoginScreen.route) {
+                navController.navigate(Screen.OnboardingScreen.route) {
                     launchSingleTop = true
 
                     popUpTo(Screen.DashboardScreen.route) {

@@ -47,7 +47,11 @@ fun BottomBar(navController: NavController) {
                 unselectedContentColor = Grey,
                 onClick = {
                     navController.navigate(screen.route) {
+                        popUpTo(Screen.DashboardScreen.route) {
+                            saveState = true
+                        }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 }
             )

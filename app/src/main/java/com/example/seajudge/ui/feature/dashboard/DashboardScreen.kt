@@ -47,15 +47,12 @@ fun DashboardScreen(
 ) {
     val onEvent = dashboardViewModel::onEvent
     val reportsState = dashboardViewModel.reportsState
-    val logoutState = dashboardViewModel.logoutState
     val searchQuery = dashboardViewModel.searchQuery
     val onSearchQueryChanged = dashboardViewModel::onSearchQueryChanged
     val selectedReportImg = dashboardViewModel.selectedReportImg
     val onSelectedReportImgChanged = dashboardViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = dashboardViewModel.fullSizeImgVis
     val onFulLSizeImgVisChanged = dashboardViewModel::onFulLSizeImgVisChanged
-    val logoutConfirmDlgVis = dashboardViewModel.logoutConfirmDlgVis
-    val onLogoutConfirmDlgVisChanged = dashboardViewModel::onLogoutConfirmDlgVisChanged
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -73,9 +70,7 @@ fun DashboardScreen(
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
-                    DashboardHeader(
-                        onLogoutConfirmDlgVisChanged = onLogoutConfirmDlgVisChanged
-                    )
+                    DashboardHeader()
                     Spacer(modifier = Modifier.height(15.dp))
                     SearchTextField(
                         onEvent = onEvent,
@@ -145,41 +140,12 @@ fun DashboardScreen(
                     onVisibilityChanged = onFulLSizeImgVisChanged
                 )
             }
-
-            // Logout confirmation dialog
-            if (logoutConfirmDlgVis) {
-                CustomAlertDialog(
-                    onVisibilityChanged = onLogoutConfirmDlgVisChanged,
-                    title = "Logout",
-                    message = "Apakah kamu yakin ingin logout?",
-                    onConfirmClicked = {
-                        onLogoutConfirmDlgVisChanged(false)
-                        onEvent(DashboardEvent.Logout)
-                    },
-                    onDismissClicked = { onLogoutConfirmDlgVisChanged(false) }
-                )
-            }
-        }
-
-        // Observe logout state
-        when (logoutState) {
-            is DashboardState.SuccessLogout -> {
-                navController.navigate(Screen.OnboardingScreen.route) {
-                    launchSingleTop = true
-
-                    popUpTo(Screen.DashboardScreen.route) {
-                        inclusive = true
-                    }
-                }
-            }
-
-            else -> {}
         }
     }
 }
 
 @Composable
-fun DashboardHeader(onLogoutConfirmDlgVisChanged: (Boolean) -> Unit) {
+fun DashboardHeader() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -197,14 +163,6 @@ fun DashboardHeader(onLogoutConfirmDlgVisChanged: (Boolean) -> Unit) {
                 color = Primary,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h2
-            )
-        }
-        IconButton(onClick = { onLogoutConfirmDlgVisChanged(true) }) {
-            Icon(
-                modifier = Modifier.sizeIn(27.dp),
-                imageVector = EvaIcons.Fill.LogOut,
-                tint = Red,
-                contentDescription = "Logout icon"
             )
         }
     }

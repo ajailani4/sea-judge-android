@@ -14,16 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val getReportsUseCase: GetReportsUseCase,
-    private val deleteUsernameUseCase: DeleteUsernameUseCase,
-    private val deleteAccessTokenUseCase: DeleteAccessTokenUseCase
+    private val getReportsUseCase: GetReportsUseCase
 ) : ViewModel() {
     var reportsState by mutableStateOf<DashboardState>(DashboardState.Idle)
-    var logoutState by mutableStateOf<DashboardState>(DashboardState.Idle)
     var searchQuery by mutableStateOf<String?>(null)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
-    var logoutConfirmDlgVis by mutableStateOf(false)
 
     init {
         onEvent(DashboardEvent.LoadReports)
@@ -32,8 +28,6 @@ class DashboardViewModel @Inject constructor(
     fun onEvent(event: DashboardEvent) {
         when (event) {
             DashboardEvent.LoadReports -> getReports()
-
-            DashboardEvent.Logout -> logout()
         }
     }
 
@@ -47,10 +41,6 @@ class DashboardViewModel @Inject constructor(
 
     fun onFulLSizeImgVisChanged(visibility: Boolean) {
         fullSizeImgVis = visibility
-    }
-
-    fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
-        logoutConfirmDlgVis = visibility
     }
 
     private fun getReports() {
@@ -71,11 +61,5 @@ class DashboardViewModel @Inject constructor(
                 DashboardState.ErrorReports("Error")
             }
         }
-    }
-
-    private fun logout() {
-        deleteUsernameUseCase.invoke()
-        deleteAccessTokenUseCase.invoke()
-        logoutState = DashboardState.SuccessLogout
     }
 }

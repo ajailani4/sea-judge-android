@@ -10,6 +10,7 @@ sealed class MyReportsState {
 
     data class MyReports(val myReports: List<Report>?) : MyReportsState()
     object SuccessDeleteReport : MyReportsState()
+    object SuccessLogout : MyReportsState()
 
     data class FailMyReports(val message: String?) : MyReportsState()
     data class FailDeleteReport(val message: String?) : MyReportsState()

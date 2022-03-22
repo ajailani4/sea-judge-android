@@ -65,10 +65,10 @@ fun ReportCard(
                             tint = Secondary,
                             contentDescription = "Edit report icon"
                         )
-                        Spacer(modifier = Modifier.width(7.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Icon(
                             modifier = Modifier
-                                .size(22.dp)
+                                .size(21.dp)
                                 .clickable(onClick = onDeleteBtnClicked),
                             imageVector = EvaIcons.Outline.Trash,
                             tint = Red,

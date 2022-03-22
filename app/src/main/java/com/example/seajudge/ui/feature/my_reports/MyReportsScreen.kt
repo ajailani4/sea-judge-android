@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,7 +19,13 @@ import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.*
+import com.example.seajudge.ui.feature.dashboard.DashboardEvent
+import com.example.seajudge.ui.feature.dashboard.DashboardState
 import com.example.seajudge.ui.theme.Primary
+import com.example.seajudge.ui.theme.Red
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Fill
+import compose.icons.evaicons.fill.LogOut
 import kotlinx.coroutines.launch
 
 @Composable
@@ -33,6 +36,7 @@ fun MyReportsScreen(
     val onEvent = myReportsViewModel::onEvent
     val myReportsState = myReportsViewModel.myReportsState
     val deleteReportState = myReportsViewModel.deleteReportState
+    val logoutState = myReportsViewModel.logoutState
     val selectedReportImg = myReportsViewModel.selectedReportImg
     val onSelectedReportImgChanged = myReportsViewModel::onSelectedReportImgChanged
     val fullSizeImgVis = myReportsViewModel.fullSizeImgVis
@@ -40,6 +44,8 @@ fun MyReportsScreen(
     val onDeletedReportChanged = myReportsViewModel::onDeletedReportChanged
     val deletedReportDlgVis = myReportsViewModel.deletedReportDlgVis
     val onDeletedReportDlgVisChanged = myReportsViewModel::onDeletedReportDlgVisChanged
+    val logoutConfirmDlgVis = myReportsViewModel.logoutConfirmDlgVis
+    val onLogoutConfirmDlgVisChanged = myReportsViewModel::onLogoutConfirmDlgVisChanged
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -51,7 +57,7 @@ fun MyReportsScreen(
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
-                    MyReportsHeader()
+                    MyReportsHeader(onLogoutConfirmDlgVisChanged)
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
@@ -140,6 +146,20 @@ fun MyReportsScreen(
                     }
                 )
             }
+
+            // Logout confirmation dialog
+            if (logoutConfirmDlgVis) {
+                CustomAlertDialog(
+                    onVisibilityChanged = onLogoutConfirmDlgVisChanged,
+                    title = "Logout",
+                    message = "Apakah kamu yakin ingin logout?",
+                    onConfirmClicked = {
+                        onLogoutConfirmDlgVisChanged(false)
+                        onEvent(MyReportsEvent.Logout)
+                    },
+                    onDismissClicked = { onLogoutConfirmDlgVisChanged(false) }
+                )
+            }
         }
 
         // Observe delete report state
@@ -180,25 +200,54 @@ fun MyReportsScreen(
 
             else -> {}
         }
+
+        // Observe logout state
+        when (logoutState) {
+            is MyReportsState.SuccessLogout -> {
+                navController.navigate(Screen.OnboardingScreen.route) {
+                    launchSingleTop = true
+
+                    popUpTo(Screen.DashboardScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            else -> {}
+        }
     }
 }
 
 @Composable
-fun MyReportsHeader() {
+fun MyReportsHeader(onLogoutConfirmDlgVisChanged: (Boolean) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                modifier = Modifier.size(30.dp),
-                painter = painterResource(id = R.drawable.logo_app),
-                contentDescription = "App logo"
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = "Sea Judge",
-                color = Primary,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.h2
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row {
+                Image(
+                    modifier = Modifier.size(30.dp),
+                    painter = painterResource(id = R.drawable.logo_app),
+                    contentDescription = "App logo"
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    text = "Sea Judge",
+                    color = Primary,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h2
+                )
+            }
+            IconButton(onClick = { onLogoutConfirmDlgVisChanged(true) }) {
+                Icon(
+                    modifier = Modifier.sizeIn(27.dp),
+                    imageVector = EvaIcons.Fill.LogOut,
+                    tint = Red,
+                    contentDescription = "Logout icon"
+                )
+            }
         }
         Spacer(modifier = Modifier.height(15.dp))
         Text(

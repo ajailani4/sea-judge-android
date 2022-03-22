@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.seajudge.domain.use_case.report.DeleteReportUseCase
 import com.example.seajudge.domain.use_case.report.GetUserReportsUseCase
+import com.example.seajudge.domain.use_case.user_credential.DeleteAccessTokenUseCase
+import com.example.seajudge.domain.use_case.user_credential.DeleteUsernameUseCase
 import com.example.seajudge.domain.use_case.user_credential.GetUsernameUseCase
+import com.example.seajudge.ui.feature.dashboard.DashboardState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,14 +19,18 @@ import javax.inject.Inject
 class MyReportsViewModel @Inject constructor(
     private val getMyReportsUseCase: GetUserReportsUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
-    private val deleteReportUseCase: DeleteReportUseCase
+    private val deleteReportUseCase: DeleteReportUseCase,
+    private val deleteUsernameUseCase: DeleteUsernameUseCase,
+    private val deleteAccessTokenUseCase: DeleteAccessTokenUseCase
 ) : ViewModel() {
-    var myReportsState by mutableStateOf<MyReportsState>(MyReportsState.LoadingMyReports)
+    var myReportsState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
+    var logoutState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
     var deleteReportState by mutableStateOf<MyReportsState>(MyReportsState.Idle)
     var selectedReportImg by mutableStateOf("")
     var fullSizeImgVis by mutableStateOf(false)
     private var deletedReport by mutableStateOf(0)
     var deletedReportDlgVis by mutableStateOf(false)
+    var logoutConfirmDlgVis by mutableStateOf(false)
 
     init {
         onEvent(MyReportsEvent.LoadMyReports)
@@ -34,6 +41,8 @@ class MyReportsViewModel @Inject constructor(
             MyReportsEvent.LoadMyReports -> getMyReports()
 
             MyReportsEvent.DeleteReport -> deleteReport()
+
+            MyReportsEvent.Logout -> logout()
         }
     }
 
@@ -51,6 +60,10 @@ class MyReportsViewModel @Inject constructor(
 
     fun onDeletedReportDlgVisChanged(visibility: Boolean) {
         deletedReportDlgVis = visibility
+    }
+
+    fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
+        logoutConfirmDlgVis = visibility
     }
 
     private fun getMyReports() {
@@ -87,5 +100,11 @@ class MyReportsViewModel @Inject constructor(
                 MyReportsState.ErrorDeleteReport("Error")
             }
         }
+    }
+
+    private fun logout() {
+        deleteUsernameUseCase.invoke()
+        deleteAccessTokenUseCase.invoke()
+        logoutState = MyReportsState.SuccessLogout
     }
 }

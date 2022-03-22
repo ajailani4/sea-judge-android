@@ -10,7 +10,6 @@ import com.example.seajudge.domain.use_case.report.GetUserReportsUseCase
 import com.example.seajudge.domain.use_case.user_credential.DeleteAccessTokenUseCase
 import com.example.seajudge.domain.use_case.user_credential.DeleteUsernameUseCase
 import com.example.seajudge.domain.use_case.user_credential.GetUsernameUseCase
-import com.example.seajudge.ui.feature.dashboard.DashboardState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

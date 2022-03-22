@@ -28,17 +28,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.seajudge.R
-import com.example.seajudge.ui.Screen
-import com.example.seajudge.ui.common.component.*
-import com.example.seajudge.ui.theme.*
+import com.example.seajudge.ui.common.component.EmptyItemIllustration
+import com.example.seajudge.ui.common.component.FullSizeImage
+import com.example.seajudge.ui.common.component.MediumProgressBar
+import com.example.seajudge.ui.common.component.ReportCard
+import com.example.seajudge.ui.theme.Grey
+import com.example.seajudge.ui.theme.Primary
+import com.example.seajudge.ui.theme.SearchTextFieldGrey
+import com.example.seajudge.ui.theme.poppinsFamily
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
-import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.Search
 import kotlinx.coroutines.launch
 

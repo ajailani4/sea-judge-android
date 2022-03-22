@@ -19,8 +19,6 @@ import androidx.navigation.NavController
 import com.example.seajudge.R
 import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.*
-import com.example.seajudge.ui.feature.dashboard.DashboardEvent
-import com.example.seajudge.ui.feature.dashboard.DashboardState
 import com.example.seajudge.ui.theme.Primary
 import com.example.seajudge.ui.theme.Red
 import com.google.accompanist.swiperefresh.SwipeRefresh

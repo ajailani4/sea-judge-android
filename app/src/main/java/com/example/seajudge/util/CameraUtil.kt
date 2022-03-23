@@ -27,15 +27,11 @@ suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutin
 
 fun ImageCapture.takePicture(
     context: Context,
-    lensFacing: Int,
     onImageCaptured: (File) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
     val photoFile = File(context.cacheDir, "${UUID.randomUUID()}.jpg")
-    val outputFileOptions = getOutputFileOptions(
-        lensFacing = lensFacing,
-        photoFile = photoFile
-    )
+    val outputFileOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
     this.takePicture(
         outputFileOptions,
@@ -52,21 +48,6 @@ fun ImageCapture.takePicture(
 
         }
     )
-}
-
-fun getOutputFileOptions(
-    lensFacing: Int,
-    photoFile: File
-): ImageCapture.OutputFileOptions {
-    // Create image capture metadata
-    val metadata = ImageCapture.Metadata().apply {
-        isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
-    }
-
-    // Create output options
-    return ImageCapture.OutputFileOptions.Builder(photoFile)
-        .setMetadata(metadata)
-        .build()
 }
 
 // This is used if image is picked from gallery

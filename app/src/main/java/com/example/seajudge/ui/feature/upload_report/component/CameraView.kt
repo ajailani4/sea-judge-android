@@ -49,7 +49,6 @@ fun CameraView(
                 is CameraMenuEvent.Capture -> {
                     imageCapture.takePicture(
                         context = context,
-                        lensFacing = lensFacing,
                         onImageCaptured = onImageCaptured,
                         onError = onError
                     )

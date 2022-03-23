@@ -77,7 +77,6 @@ fun EditReportScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                Spacer(modifier = Modifier.height(25.dp))
                 Text(
                     text = "Pelanggaran",
                     color = Color.Black,

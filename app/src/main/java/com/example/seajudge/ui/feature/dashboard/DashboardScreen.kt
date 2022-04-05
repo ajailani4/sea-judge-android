@@ -72,7 +72,7 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
             onRefresh = {
-                onSwipeRefreshingChanged(false)
+                onSwipeRefreshingChanged(true)
                 onEvent(DashboardEvent.LoadReports)
             },
             indicator = { state, trigger ->
@@ -110,6 +110,8 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
                         }
 
                         is DashboardState.Reports -> {
+                            onSwipeRefreshingChanged(false)
+
                             val reports = reportsState.reports
 
                             if (reports != null) {
@@ -133,6 +135,8 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
                         }
 
                         is DashboardState.FailReports -> {
+                            onSwipeRefreshingChanged(false)
+
                             coroutineScope.launch {
                                 reportsState.message?.let { message ->
                                     scaffoldState.snackbarHostState.showSnackbar(message)
@@ -141,6 +145,8 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
                         }
 
                         is DashboardState.ErrorReports -> {
+                            onSwipeRefreshingChanged(false)
+
                             coroutineScope.launch {
                                 reportsState.message?.let { message ->
                                     scaffoldState.snackbarHostState.showSnackbar(message)

@@ -57,7 +57,7 @@ fun MyReportsScreen(
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
             onRefresh = {
-                onSwipeRefreshingChanged(false)
+                onSwipeRefreshingChanged(true)
                 onEvent(MyReportsEvent.LoadMyReports)
             },
             indicator = { state, trigger ->
@@ -87,6 +87,8 @@ fun MyReportsScreen(
                         }
 
                         is MyReportsState.MyReports -> {
+                            onSwipeRefreshingChanged(false)
+
                             val myReports = myReportsState.myReports
 
                             if (myReports != null) {
@@ -121,6 +123,8 @@ fun MyReportsScreen(
                         }
 
                         is MyReportsState.FailMyReports -> {
+                            onSwipeRefreshingChanged(false)
+
                             coroutineScope.launch {
                                 myReportsState.message?.let { message ->
                                     scaffoldState.snackbarHostState.showSnackbar(message)
@@ -129,6 +133,8 @@ fun MyReportsScreen(
                         }
 
                         is MyReportsState.ErrorMyReports -> {
+                            onSwipeRefreshingChanged(false)
+
                             coroutineScope.launch {
                                 myReportsState.message?.let { message ->
                                     scaffoldState.snackbarHostState.showSnackbar(message)

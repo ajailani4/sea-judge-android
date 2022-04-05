@@ -62,9 +62,9 @@ class UploadReportViewModel @Inject constructor(
     }
 
     private fun uploadReport() {
-        viewModelScope.launch {
-            uploadReportState = UploadReportState.UploadingReport
+        uploadReportState = UploadReportState.UploadingReport
 
+        viewModelScope.launch {
             uploadReportState = try {
                 val response = uploadReportUseCase.invoke(
                     username = getUsernameUseCase.invoke()!!,

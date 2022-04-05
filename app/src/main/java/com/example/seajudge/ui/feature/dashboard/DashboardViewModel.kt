@@ -47,9 +47,9 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun getReports() {
-        viewModelScope.launch {
-            reportsState = DashboardState.LoadingReports
+        reportsState = DashboardState.LoadingReports
 
+        viewModelScope.launch {
             reportsState = try {
                 if (searchQuery?.isEmpty() == true) searchQuery = null
 

@@ -77,9 +77,9 @@ class MyReportsViewModel @Inject constructor(
     }
 
     private fun getMyReports() {
-        viewModelScope.launch {
-            myReportsState = MyReportsState.LoadingMyReports
+        myReportsState = MyReportsState.LoadingMyReports
 
+        viewModelScope.launch {
             myReportsState = try {
                 val response = getMyReportsUseCase.invoke(getUsernameUseCase.invoke()!!)
 
@@ -95,9 +95,9 @@ class MyReportsViewModel @Inject constructor(
     }
 
     private fun deleteReport() {
-        viewModelScope.launch {
-            deleteReportState = MyReportsState.DeletingReport
+        deleteReportState = MyReportsState.DeletingReport
 
+        viewModelScope.launch {
             deleteReportState = try {
                 val response = deleteReportUseCase.invoke(deletedReport)
 

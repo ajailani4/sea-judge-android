@@ -49,9 +49,9 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun login() {
-        viewModelScope.launch {
-            loginState = LoginState.LoggingIn
+        loginState = LoginState.LoggingIn
 
+        viewModelScope.launch {
             loginState = try {
                 val response = loginUserUseCase.invoke(
                     LoginRequest(username = username, password = password)

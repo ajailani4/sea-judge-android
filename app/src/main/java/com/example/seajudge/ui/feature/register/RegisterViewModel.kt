@@ -69,9 +69,9 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun register() {
-        viewModelScope.launch {
-            registerState = RegisterState.Registering
+        registerState = RegisterState.Registering
 
+        viewModelScope.launch {
             registerState = try {
                 val response = registerUserUseCase.invoke(
                     RegisterRequest(

@@ -50,9 +50,9 @@ class EditReportViewModel @Inject constructor(
     }
 
     private fun editReport() {
-        viewModelScope.launch {
-            editReportState = EditReportState.EditingReport
+        editReportState = EditReportState.EditingReport
 
+        viewModelScope.launch {
             editReportState = try {
                 val response = editReportUseCase.invoke(
                     id = savedStateHandle.get<Int>("id")!!,

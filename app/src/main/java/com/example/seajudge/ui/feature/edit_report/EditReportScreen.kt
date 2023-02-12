@@ -70,10 +70,11 @@ fun EditReportScreen(
                 onBackBtnClicked = { onBackConfirmDlgVisChanged(true) }
             )
         }
-    ) {
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
             Column(modifier = Modifier.padding(20.dp)) {

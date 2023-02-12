@@ -3,8 +3,11 @@ package com.example.seajudge.data.data_source.remote
 import com.example.seajudge.data.api.ApiService
 import com.example.seajudge.data.model.response.BaseResponse
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
@@ -24,16 +27,16 @@ class ReportRemoteDataSource @Inject constructor(
         date: String,
         time: String
     ): Response<BaseResponse<Any>> {
-        val usernamePart = RequestBody.create(MediaType.parse("multipart/form-data"), username)
+        val usernamePart = username.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val photoPart = MultipartBody.Part.createFormData(
             "photo",
             photo.name,
-            RequestBody.create(MediaType.parse("image/*"), photo)
+            photo.asRequestBody("image/*".toMediaTypeOrNull())
         )
-        val violationPart = RequestBody.create(MediaType.parse("multipart/form-data"), violation)
-        val locationPart = RequestBody.create(MediaType.parse("multipart/form-data"), location)
-        val datePart = RequestBody.create(MediaType.parse("multipart/form-data"), date)
-        val timePart = RequestBody.create(MediaType.parse("multipart/form-data"), time)
+        val violationPart = violation.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val locationPart = location.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val datePart = date.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val timePart = time.toRequestBody("multipart/form-data".toMediaTypeOrNull())
 
         return apiService.uploadReport(
             username = usernamePart,

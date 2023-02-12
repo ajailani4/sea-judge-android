@@ -53,7 +53,7 @@ fun MyReportsScreen(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(scaffoldState = scaffoldState) { innerPadding ->
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
             onRefresh = {
@@ -68,7 +68,7 @@ fun MyReportsScreen(
                 )
             }
         ) {
-            Box {
+            Box(modifier = Modifier.padding(innerPadding)) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(20.dp)
@@ -104,7 +104,7 @@ fun MyReportsScreen(
                                             onEditBtnClicked = {
                                                 navController.navigate(
                                                     Screen.EditReportScreen.route +
-                                                        "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
+                                                            "?id=${myReport.id}&violation=${myReport.violation}&location=${myReport.location}&date=${myReport.date}&time=${myReport.time}"
                                                 )
                                             },
                                             onDeleteBtnClicked = {

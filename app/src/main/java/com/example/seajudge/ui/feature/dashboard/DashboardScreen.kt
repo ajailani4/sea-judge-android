@@ -68,7 +68,7 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val localFocusManager = LocalFocusManager.current
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(scaffoldState = scaffoldState) { innerPadding ->
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
             onRefresh = {
@@ -83,7 +83,7 @@ fun DashboardScreen(dashboardViewModel: DashboardViewModel = hiltViewModel()) {
                 )
             }
         ) {
-            Box {
+            Box(modifier = Modifier.padding(innerPadding)) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(20.dp)

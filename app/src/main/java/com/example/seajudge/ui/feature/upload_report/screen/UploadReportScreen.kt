@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.seajudge.ui.Screen
 import com.example.seajudge.ui.common.component.CustomAlertDialog
 import com.example.seajudge.ui.common.component.CustomToolbar
@@ -93,8 +93,12 @@ fun UploadReportScreen(
                 )
             }
         }
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             UploadReportForm(
                 onEvent = onEvent,
                 uploadReportState = uploadReportState,
@@ -217,7 +221,7 @@ fun UploadReportForm(
                         .fillMaxWidth()
                         .sizeIn(maxHeight = 400.dp)
                         .clip(RoundedCornerShape(10.dp)),
-                    painter = rememberImagePainter(photo),
+                    painter = rememberAsyncImagePainter(photo),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Report image"
                 )

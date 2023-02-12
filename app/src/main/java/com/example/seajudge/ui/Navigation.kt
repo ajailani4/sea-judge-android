@@ -35,7 +35,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
 
         composable(
             route = Screen.EditReportScreen.route +
-                "?id={id}&violation={violation}&location={location}&date={date}&time={time}",
+                    "?id={id}&violation={violation}&location={location}&date={date}&time={time}",
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.IntType

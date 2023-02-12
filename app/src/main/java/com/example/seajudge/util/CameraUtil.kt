@@ -2,7 +2,6 @@ package com.example.seajudge.util
 
 import android.content.Context
 import android.net.Uri
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.lifecycle.ProcessCameraProvider

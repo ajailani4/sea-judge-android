@@ -17,7 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.seajudge.data.model.Report
 import com.example.seajudge.ui.theme.DarkGrey
 import com.example.seajudge.ui.theme.Primary
@@ -84,7 +84,7 @@ fun ReportCard(
                     .sizeIn(maxHeight = 200.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .clickable(onClick = onImageClicked),
-                painter = rememberImagePainter(report.photo),
+                painter = rememberAsyncImagePainter(report.photo),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Report image"
             )

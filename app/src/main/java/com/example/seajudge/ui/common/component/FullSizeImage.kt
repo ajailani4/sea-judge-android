@@ -17,7 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
@@ -55,7 +55,7 @@ fun FullSizeImage(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = rememberImagePainter(image),
+                        painter = rememberAsyncImagePainter(image),
                         contentScale = ContentScale.Fit,
                         contentDescription = "Full size image"
                     )
